@@ -2,8 +2,8 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import listEndpoints from "express-list-endpoints";
-import userRoutes from "./routes/user.js";
-import recipeRoutes from "./routes/recipes.js";
+import userRoutes from "./routes/userRoutes.js";
+import recipeRoutes from "./routes/recipeRoutes.js";
 import dotenv from "dotenv";
 dotenv.config();
 

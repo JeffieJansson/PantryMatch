@@ -10,7 +10,6 @@
   "author": "",
   "type": "commonjs",
   "main": "server.js",
-
   "dependencies": {
     "@babel/core": "^7.17.9",
     "@babel/node": "^7.16.8",
