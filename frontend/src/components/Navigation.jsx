@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
@@ -47,7 +46,10 @@ const Navigation = () => (
         <NavLink to="/saved">Saved Recipes</NavLink>
       </NavItem>
       <NavItem>
-        <NavLink to="/about">About this app</NavLink>
+        <NavLink to="/about">About</NavLink>
+      </NavItem>
+      <NavItem>
+        <NavLink to="/member">Login</NavLink>
       </NavItem>
     </NavList>
   </NavContainer>
