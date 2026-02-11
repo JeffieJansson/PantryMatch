@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Navigation from "./components/Navigation";
+import Member from "./pages/member";
 import Home from "./pages/home";
 import { useUserStore } from "./stores/userStore";
 import About from "./pages/about";
@@ -14,15 +15,18 @@ export const App = () => {
 
   return (
     <BrowserRouter>
-
       <Navigation />
 
       <Routes>
-        
+
         <Route
           path="/"
+          element={<Home />}
+        />
+        <Route
+          path="/member"
           element={
-            <Home
+            <Member
               user={user}
               isSigningUp={isSigningUp}
               setIsSigningUp={setIsSigningUp}
@@ -32,26 +36,22 @@ export const App = () => {
           }
         />
 
-
-        {/* Protected route */}
+        {/* Protected/Auth route */}
         <Route
           path="/saved"
           element={
-            user ? <h2>Saved Recipes</h2> : <Navigate to="/" />
+            user ? <h2>Saved Recipes</h2> : <Navigate to="/member" />
           }
-
         />
 
 
         <Route
           path="/about"
-          element={
-            <About />
-          }
+          element={<About />}
         />
 
-      </Routes>
 
+      </Routes>
     </BrowserRouter>
   );
 };
