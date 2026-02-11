@@ -46,7 +46,7 @@ router.post("/", authenticateUser, async (req, res) => {
 
 
 // Get all recipes 
-router.get('/', authenticateUser, async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const recipes = await Recipe.find({ userId: req.user._id });
     res.status(200).json({
@@ -65,7 +65,7 @@ router.get('/', authenticateUser, async (req, res) => {
 
 // get recipes by id
 
-router.get("/:id", authenticateUser, async (req, res) => {
+router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -100,7 +100,7 @@ router.get("/:id", authenticateUser, async (req, res) => {
 
 // search for recipes based on ingredients and mode (allowExtra or exact)
 
-router.get("/search", authenticateUser, async (req, res) => {
+router.get("/search", async (req, res) => {
   const { ingredients, mode } = req.query;
   try {
     const params = {
