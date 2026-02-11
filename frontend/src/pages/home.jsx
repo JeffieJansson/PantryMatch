@@ -1,59 +1,38 @@
-import { LoginForm } from '../components/LoginForm';
-import { SignupForm } from '../components/SignupForm';
+import SearchRecipe from "../components/SearchRecipe";
 import styled from "styled-components";
 
+const Container = styled.div`
+  max-width: 900px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  
+`;
 
-const Intro = styled.div`
-  margin-top: 3rem;
+const Title = styled.h1`
   text-align: center;
-  h1 {
-    font-size: 2.2rem;
-    margin-bottom: 0.5rem;
-  }
-  p {
-    color: #555;
-    font-size: 1.1rem;
-  }
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #2e8b57;
 `;
 
-const AuthContainer = styled.div`
-  margin-top: 2rem;
+const Subtitle = styled.p`
+  text-align: center;
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 2.5rem;
+  
 `;
-
-const LogoutButton = styled.button`
-  background: #c0392b;
-  color: #fff;
-  border: none;
-  padding: 0.7rem 1.2rem;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 2rem;
-  font-size: 1rem;
-  transition: background 0.2s;
-  &:hover {
-    background: #a93226;
-  }
-`;
-
-const Home = ({ user, isSigningUp, setIsSigningUp, handleLogin, handleLogout }) => {
+const Home = () => {
   return (
-    <>
-      <Intro>
-        <h1>What to cook?</h1>
-        <p>Sign up or log in and start discovering recipes based on what you have at home</p>
-      </Intro>
-      {user ? (
-        <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
-      ) : (
-        <AuthContainer>
-          {isSigningUp ? (
-            <SignupForm handleLogin={handleLogin} onToggleAuth={() => setIsSigningUp(false)} />
-          ) : (
-            <LoginForm handleLogin={handleLogin} onToggleAuth={() => setIsSigningUp(true)} />
-          )}
-        </AuthContainer>
-      )}
-    </>
+    <Container>
+    <Title>What to cook?</Title>
+    <Subtitle>Discover recipes based on what you have at home</Subtitle>
+  <SearchRecipe />
+  </Container>
+
   );
 };
 
