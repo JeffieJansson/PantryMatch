@@ -1,0 +1,36 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle -->
+  <circle cx="256" cy="256" r="256" fill="#2E8B57"/>
+  
+  <!-- Inner Circle (plate-like) -->
+  <circle cx="256" cy="256" r="160" fill="white"/>
+  <circle cx="256" cy="256" r="150" stroke="#E8F5E9" stroke-width="8"/>
+  
+  <!-- Tomato (top) -->
+  <circle cx="256" cy="170" r="28" fill="#FF6B6B"/>
+  <path d="M250 160C250 160 256 155 262 160" stroke="#2E8B57" stroke-width="4" stroke-linecap="round"/>
+  
+  <!-- Carrot (right) -->
+  <path d="M330 220L355 245C358 248 358 253 355 256L330 281C327 284 322 284 319 281L310 272" fill="#FF8C42"/>
+  <circle cx="318" cy="235" r="5" fill="#2E8B57" opacity="0.3"/>
+  
+  <!-- Onion (bottom right) -->
+  <ellipse cx="300" cy="310" rx="24" ry="28" fill="#F4E4C1"/>
+  <path d="M295 295C295 295 300 290 305 295" stroke="#2E8B57" stroke-width="3" stroke-linecap="round"/>
+  
+  <!-- Broccoli (bottom left) -->
+  <circle cx="210" cy="310" r="18" fill="#4CAF50"/>
+  <circle cx="200" cy="300" r="12" fill="#4CAF50"/>
+  <circle cx="220" cy="300" r="12" fill="#4CAF50"/>
+  <rect x="207" y="315" width="6" height="20" fill="#8BC34A"/>
+  
+  <!-- Mushroom (left) - REPLACED GARLIC -->
+  <ellipse cx="182" cy="235" rx="22" ry="16" fill="#D4A574"/>
+  <path d="M182 235Q182 245 182 250" stroke="#F5DEB3" stroke-width="3" fill="none"/>
+  <rect x="176" y="248" width="12" height="18" rx="2" fill="#F5DEB3"/>
+  <ellipse cx="182" cy="234" rx="18" ry="13" fill="#8B6F47" opacity="0.3"/>
+  
+  <!-- Center Checkmark -->
+  <circle cx="256" cy="256" r="45" fill="#FFD700"/>
+  <path d="M235 256L248 269L277 240" stroke="white" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
