@@ -2,16 +2,28 @@
 import { useState } from "react";
 import { API_URL } from "../api/api";
 import styled from "styled-components";
+import { media } from "../styles/media";
 
 // Styled Components
 const StyledForm = styled.form`
   background: #fff;
-  padding: 2rem;
+  padding: 1.2rem;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  max-width: 350px;
+  max-width: 98vw;
   margin: 2rem auto;
+
+  @media ${media.tablet} {
+    max-width: 400px;
+    padding: 1.5rem;
+  }
+  @media ${media.desktop} {
+    max-width: 350px;
+    padding: 2rem;
+  }
 `;
+
+
 
 const StyledHeading = styled.h2`
   text-align: center;
@@ -36,7 +48,17 @@ const StyledInput = styled.input`
   border-radius: 4px;
   border: 1px solid #ccc;
   font-size: 1rem;
+  width: 100%;
+
+  @media ${media.tablet} {
+    font-size: 1.05rem;
+  }
+  @media ${media.desktop} {
+    font-size: 1.1rem;
+  }
 `;
+
+
 
 const StyledButton = styled.button`
   background: #2e8b57;
