@@ -10,6 +10,9 @@ const Card = styled.div`
 
 const RecipeCard = ({ recipe }) => (
   <Card>
+    {/* TODO: show image, title, used/missing ingredients, servings, summary */}
+    {/* TODO: add Show more/Show less and expand the card */}
+    {/* TODO: When expanded, show all ingredients, instructions, and save button */}
     <h3>{recipe.title}</h3>
     {recipe.image && 
     <img 
