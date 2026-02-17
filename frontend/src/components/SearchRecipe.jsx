@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useRecipeActions } from "../hooks/useRecipeActions";
+import RecipeList from "./RecipeList";
 import styled from "styled-components";
 import { media } from "../styles/media";
 
@@ -76,7 +78,7 @@ const AddButton = styled.button`
 
 const FilterSection = styled.div`
   margin-bottom: 2rem;
-  background: #f7f7f7;
+  background: #fff;
   border-radius: 8px;
   padding: 1.2rem 1rem;
 `;
@@ -114,13 +116,43 @@ const ShowButton = styled.button`
     background: #119a65;
   }
 `;
+const IngredientsInfo = styled.div`
+  margin-bottom: 1rem;
+`;
+const ErrorMsg = styled.p`
+  color: #d32f2f;
+  font-weight: 500;
+  margin: 1rem 0;
+`;
 
 const SearchRecipe = () => {
   const [input, setInput] = useState("");
+  const {
+    ingredients, recipes, mode, loading, error,
+    setMode, addIngredient, searchRecipes
+  } = useRecipeActions();
+
+  const handleAdd = () => {
+    const trimmed = input.trim();
+    if (trimmed && !ingredients.includes(trimmed)) {
+      addIngredient(trimmed);
+      setInput("");
+    }
+  };
+
+  const handleSearch = () => {
+    if (ingredients.length > 0) {
+      searchRecipes();
+    }
+  };
+
+  const handleModeChange = (e) => {
+    setMode(e.target.value);
+  };
 
   return (
     <Section>
-      <Form>
+      <Form onSubmit={e => { e.preventDefault(); handleAdd(); }}>
         <Input
           type="text"
           placeholder="onion, garlic, chicken..."
@@ -128,34 +160,44 @@ const SearchRecipe = () => {
           onChange={(e) => setInput(e.target.value)}
         />
         <AddButton 
-          type="button">
+          type="submit">
             Add
         </AddButton>
-     
       </Form>
+        {ingredients.length > 0 && (
+     <IngredientsInfo>
+        <strong>Ingredients:</strong> {ingredients.join(", ")}
+     </IngredientsInfo>
+        )}
       <FilterSection>
         <FilterTitle>Filter</FilterTitle>
         <FilterLabel>
-          <Radio 
-            type="radio" 
-            name="filter" 
-            defaultChecked 
-            />
-            Use only these ingredients (no extras allowed)
+          <Radio
+            type="radio"
+            name="filter"
+            value="only"
+            checked={mode === "only"}
+            onChange={handleModeChange}
+          />
+          Use only these ingredients (no extras allowed)
         </FilterLabel>
         <FilterLabel>
-          <Radio 
-            type="radio" 
-            name="filter" 
-            />
-            Allow extra ingredients (recipe may contain more)
+          <Radio
+            type="radio"
+            name="filter"
+            value="allowExtra"
+            checked={mode === "allowExtra"}
+            onChange={handleModeChange}
+          />
+          Allow extra ingredients (recipe may contain more)
         </FilterLabel>
       </FilterSection>
-
-      <ShowButton 
-          type="button">
-          Show recipes
+      <ShowButton type="button" onClick={handleSearch}>
+        Show recipes
       </ShowButton>
+        {loading && <p>Loading...</p>}
+        {error && <ErrorMsg>{error}</ErrorMsg>}
+        {recipes && recipes.length > 0 && <RecipeList recipes={recipes} />}
     </Section>
   );
 };
