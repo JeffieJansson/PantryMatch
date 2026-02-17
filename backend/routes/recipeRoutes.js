@@ -22,10 +22,10 @@ router.get("/search", async (req, res) => {
   // split ingredients by comma and trim whitespace, also filter out empty strings
   const ingredientList = ingredients.split(",").map(i => i.trim()).filter(Boolean);
   
-  if (ingredientList.length < 2) {
+  if (ingredientList.length < 1) {
     return res.status(400).json({
       success: false,
-      message: "Please provide at least 2 ingredients",
+      message: "Please provide at least 1 ingredient",
       response: null,
     });
   }
@@ -61,9 +61,11 @@ router.get("/search", async (req, res) => {
       image: recipe.image,
       usedIngredients: recipe.usedIngredients || [],
       missedIngredients: recipe.missedIngredients || [],
-      likes: recipe.aggregateLikes || 0,
+      summary: recipe.summary,
       readyInMinutes: recipe.readyInMinutes,
       servings: recipe.servings,
+      dishTypes: recipe.dishTypes?.join(", "),
+      cuisines: recipe.cuisines?.join(", "),
     }));
 
     res.status(200).json({
@@ -72,6 +74,7 @@ router.get("/search", async (req, res) => {
       response: formattedRecipes,
     });
   } catch (error) {
+    console.log(error.response?.data || error.message || error);
     res.status(500).json({
       success: false,
       message: "Failed to fetch recipes from Spoonacular",

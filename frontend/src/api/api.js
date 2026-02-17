@@ -1,6 +1,7 @@
 
 export const API_URL = 'https://pantrymatch.onrender.com';
 
+
 // Helper to handle fetch responses
 async function handleResponse(response) {
   if (!response.ok) {
@@ -12,13 +13,13 @@ async function handleResponse(response) {
 
 // Fetch recipes by ingredients from backend API
 export async function fetchRecipeByIngredients(ingredients, mode = "allowExtra") {
-  if (!ingredients || ingredients.length < 2) {
-    throw new Error("Please add at least 2 ingredients.");
+  if (!ingredients || ingredients.length < 1) {
+    throw new Error("Please add at least 1 ingredient.");
   }
   // Create query string
   const query = ingredients.join(",");
   const params = new URLSearchParams({ ingredients: query, mode });
-  const res = await fetch(`/api/recipes/search?${params}`);
+  const res = await fetch(`${API_URL}/recipes/search?${params}`);
   const data = await handleResponse(res);
   return data.response;
 }
