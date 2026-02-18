@@ -47,8 +47,8 @@ router.get("/search", async (req, res) => {
       id: recipe.id,
       title: recipe.title,
       image: recipe.image,
-      readyInMinutes: recipe.readyInMinutes,
-      servings: recipe.servings,
+      readyInMinutes: recipe.readyInMinutes ?? null,
+      servings: recipe.servings ?? null,
       usedIngredients: recipe.usedIngredients || [],
       missedIngredients: recipe.missedIngredients || [],
     }));
