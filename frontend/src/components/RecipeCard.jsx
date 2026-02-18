@@ -104,19 +104,15 @@ const RecipeCard = ({ recipe }) => {
     <Card>
       {recipe.image && <Image src={recipe.image} alt={recipe.title} />}
       <Title>{recipe.title}</Title>
-      <Info>
-        ⏱️ {recipe.readyInMinutes} min | 🍽️ {recipe.servings} servings
-      </Info>
-
       <IngredientInfo>
         <Matched>
-          ✅ Matched: {recipe.usedIngredients?.map((i) => i.name).join(", ") || "None"}
+          ✅ Matched: {recipe.usedIngredients?.map((i) => i.name).join(", ") || "No matched ingredients"}
         </Matched>
       </IngredientInfo>
 
       <IngredientInfo>
         <Missing>
-          ❌ Missing: {recipe.missedIngredients?.map((i) => i.name).join(", ") || "None"}
+          ❌ Missing: {recipe.missedIngredients?.map((i) => i.name).join(", ") || "No missing ingredients"}
         </Missing>
       </IngredientInfo>
 
@@ -125,16 +121,27 @@ const RecipeCard = ({ recipe }) => {
       </ToggleBtn>
 
       {isOpen && details && (
-        <Details>
+        <Details>          
+          <Info>
+            ⏱️ {details.readyInMinutes !== null && details.readyInMinutes !== undefined ? `${details.readyInMinutes} min` : 'unknown time'}
+            {' | '}
+            🍽️ {details.servings !== null && details.servings !== undefined ? `${details.servings} servings` : 'unknown servings'}
+          </Info>
           {details.summary && (
             <div dangerouslySetInnerHTML={{ __html: details.summary }} />
           )}
 
           <h4>All ingredients:</h4>
           <ul>
-            {details.extendedIngredients?.map((ing, index) => (
-              <li key={index}>{ing.original}</li>
-            ))}
+            {details.extendedIngredients
+              ?.filter(
+                (ing) =>
+                  ing.original &&
+                  !/other (things|ingredients) needed/i.test(ing.original)
+              )
+              .map((ing, index) => (
+                <li key={index}>{ing.original}</li>
+              ))}
           </ul>
 
           <h4>Instructions:</h4>
