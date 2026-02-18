@@ -1,6 +1,6 @@
 
-export const API_URL = 'https://pantrymatch.onrender.com';
-//export const API_URL = 'http://localhost:8080';
+//export const API_URL = 'https://pantrymatch.onrender.com';
+export const API_URL = 'http://localhost:8080';
 
 // Helper to handle fetch responses
 async function handleResponse(response) {
@@ -20,6 +20,7 @@ export async function fetchRecipeByIngredients(ingredients, mode = "allowExtra")
   });
   const res = await fetch(`${API_URL}/recipes/search?${params}`);
   const data = await handleResponse(res);
+  console.log("[fetchRecipeByIngredients] API response:", data.response);
   return data.response;
 }
 
