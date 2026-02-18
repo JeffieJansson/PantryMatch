@@ -1,22 +1,25 @@
 import RecipeCard from "./RecipeCard";
+import styled from "styled-components";
 
+const Container = styled.div`
+  margin-top: 2rem;
+`;
 
-// TODO: show list of recipes with basic info:
-// - image
-// - title
-// - ingredients used (those that match the user's search)
-// - missing ingredients
-// - servings
-// - summary
+const Title = styled.h2`
+  margin-bottom: 1rem;
+  color: #222;
+`;
 
 const RecipeList = ({ recipes }) => {
-  if (!recipes || recipes.length === 0) return <p>No recipes found.</p>;
+  if (!recipes || recipes.length === 0) return null;
+
   return (
-    <div>
-      {recipes.map(recipe => (
+    <Container>
+      <Title>Found {recipes.length} recipe{recipes.length !== 1 ? "s" : ""}</Title>
+      {recipes.map((recipe) => (
         <RecipeCard key={recipe.id} recipe={recipe} />
       ))}
-    </div>
+    </Container>
   );
 };
 
