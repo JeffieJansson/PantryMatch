@@ -21,7 +21,6 @@ router.get("/search", async (req, res) => {
 
   // split ingredients by comma and trim whitespace, also filter out empty strings
   const ingredientList = ingredients.split(",").map(i => i.trim()).filter(Boolean);
-  
   if (ingredientList.length < 1) {
     return res.status(400).json({
       success: false,
@@ -29,55 +28,79 @@ router.get("/search", async (req, res) => {
       response: null,
     });
   }
-
   //  ingredient list for the API call
   try {
     const params = {
-      includeIngredients: ingredients,
+      ingredients: ingredientList.join(","),
       number: 15,
-      instructionsRequired: true,
-      addRecipeInformation: true,
-      ranking: 2, // 1 = maximize used ingredients, 2 = minimize missing ingredients
+      ranking: 2,
+      ignorePantry: mode === "exact",
       apiKey: process.env.SPOONACULAR_API_KEY,
     };
-    
-    if (mode === "exact") {
-      params.fillIngredients = false;
-      params.ignorePantry = false;
-    }
-    
     const response = await axios.get(
-      "https://api.spoonacular.com/recipes/complexSearch",
+      "https://api.spoonacular.com/recipes/findByIngredients",
       { params }
     );
-
     // Extract recipes from response, handle case where data or results might be missing
-    const recipes = response.data.results || [];
 
-    // Format the recipes to only include necessary fields for the frontend
-    const formattedRecipes = recipes.map(recipe => ({
+    const recipes = response.data.map(recipe => ({
       id: recipe.id,
       title: recipe.title,
       image: recipe.image,
-      usedIngredients: recipe.usedIngredients || [],
-      missedIngredients: recipe.missedIngredients || [],
-      summary: recipe.summary,
       readyInMinutes: recipe.readyInMinutes,
       servings: recipe.servings,
-      dishTypes: recipe.dishTypes?.join(", "),
-      cuisines: recipe.cuisines?.join(", "),
+      usedIngredients: recipe.usedIngredients || [],
+      missedIngredients: recipe.missedIngredients || [],
     }));
 
     res.status(200).json({
       success: true,
       message: "Recipes fetched from Spoonacular",
-      response: formattedRecipes,
+      response: recipes,
     });
   } catch (error) {
-    console.log(error.response?.data || error.message || error);
     res.status(500).json({
       success: false,
       message: "Failed to fetch recipes from Spoonacular",
+      response: error.response?.data || error.message,
+    });
+  }
+});
+
+// (GET) Get recipe details by Spoonacular ID
+router.get("/details/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const response = await axios.get(
+      `https://api.spoonacular.com/recipes/${id}/information`,
+      {
+        params: { 
+          apiKey: process.env.SPOONACULAR_API_KEY,
+          includeNutrition: false
+        }
+      }
+    );
+
+    const details = response.data;
+
+    res.status(200).json({
+      success: true,
+      response: {
+        id: details.id,
+        title: details.title,
+        summary: details.summary,
+        instructions: details.instructions,
+        extendedIngredients: details.extendedIngredients,
+        readyInMinutes: details.readyInMinutes,
+        servings: details.servings,
+      }
+    });
+  } catch (error) {
+    console.error("Spoonacular details error:", error.response?.data || error.message);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch recipe details",
       response: error.response?.data || error.message,
     });
   }
@@ -102,8 +125,9 @@ router.get("/", authenticateUser, async (req, res) => {
 });
 
 // (GET) Get recipe by ID
-router.get("/:id", async (req, res) => {
+router.get("/:id", authenticateUser, async (req, res) => {
   const { id } = req.params;
+  
   try {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({
@@ -112,7 +136,9 @@ router.get("/:id", async (req, res) => {
         response: null,
       });
     }
+
     const recipe = await Recipe.findById(id);
+
     if (!recipe) {
       return res.status(404).json({
         success: false,
@@ -120,6 +146,15 @@ router.get("/:id", async (req, res) => {
         response: null,
       });
     }
+
+    if (recipe.userId.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: "Not authorized to access this recipe",
+        response: null,
+      });
+    }
+
     res.status(200).json({
       success: true,
       message: "Recipe found",
@@ -184,6 +219,7 @@ router.delete("/:id", authenticateUser, async (req, res) => {
       return res.status(404).json({
         success: false,
         message: "Recipe not found or you don't have permission to delete it",
+        response: null,
       });
     }
 
