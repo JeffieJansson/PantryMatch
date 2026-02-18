@@ -1,14 +1,13 @@
 import { create } from "zustand";
 
-
 export const useRecipeStore = create((set) => ({
   ingredients: [],
   recipes: [],
-  mode: "allowExtra",
+  mode: "allowExtra", 
   loading: false,
   error: null,
 
-  setMode: (mode) => set({ mode }),
+  setMode: (mode) => set({ mode }), 
 
   addIngredient: (ing) =>
     set((state) => ({
