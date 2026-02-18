@@ -1,6 +1,6 @@
 
 export const API_URL = 'https://pantrymatch.onrender.com';
-
+//export const API_URL = 'http://localhost:8080';
 
 // Helper to handle fetch responses
 async function handleResponse(response) {
@@ -13,30 +13,33 @@ async function handleResponse(response) {
 
 // Fetch recipes by ingredients from backend API
 export async function fetchRecipeByIngredients(ingredients, mode = "allowExtra") {
-  if (!ingredients || ingredients.length < 1) {
-    throw new Error("Please add at least 1 ingredient.");
-  }
-  // Create query string
   const query = ingredients.join(",");
-  const params = new URLSearchParams({ ingredients: query, mode });
+  const params = new URLSearchParams({ 
+    ingredients: query,
+    mode: mode
+  });
   const res = await fetch(`${API_URL}/recipes/search?${params}`);
   const data = await handleResponse(res);
   return data.response;
 }
 
 // Fetch recipe details by ID from Spoonacular API (public)
-export async function fetchRecipeDetails(recipeId) {
-  const API_KEY = import.meta.env.VITE_SPOONACULAR_API_KEY;
-  const url = `https://api.spoonacular.com/recipes/${recipeId}/information?apiKey=${API_KEY}`;
-  const res = await fetch(url);
-  if (!res.ok) 
-    throw new Error(`Failed to fetch recipe details: ${res.status}`);
-  return await res.json();
+export async function fetchRecipeDetails(id) {
+  const res = await fetch(`${API_URL}/recipes/details/${id}`);
+  const data = await handleResponse(res);
+  return data.response;
+}
+
+// get details for a single recipe
+export async function fetchSavedRecipeDetails(id) {
+  const res = await fetch(`${API_URL}/recipes/saved/${id}`);
+  const data = await handleResponse(res);
+  return data.response;
 }
 
 // Save a recipe to the database for logged-in user (auth required)
 export async function saveRecipe(recipeData, token) {
-  const res = await fetch('/api/recipes', {
+  const res = await fetch(`${API_URL}/recipes`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -49,10 +52,9 @@ export async function saveRecipe(recipeData, token) {
 
 // Get all saved recipes for logged-in user (auth required)
 export async function getSavedRecipes(token) {
-  const res = await fetch('/api/recipes', {
-    method: 'GET',
+  const res = await fetch(`${API_URL}/recipes`, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${token}`
     },
   });
   const data = await handleResponse(res);
@@ -61,10 +63,10 @@ export async function getSavedRecipes(token) {
 
 // Delete a saved recipe by ID (auth required)
 export async function deleteRecipe(recipeId, token) {
-  const res = await fetch(`/api/recipes/${recipeId}`, {
+  const res = await fetch(`${API_URL}/recipes/${recipeId}`, {
     method: 'DELETE',
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${token}` 
     },
   });
   return handleResponse(res);
