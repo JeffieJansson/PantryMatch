@@ -1,7 +1,7 @@
 import { useState } from "react";
+import styled from "styled-components";
 import { useRecipeActions } from "../hooks/useRecipeActions";
 import RecipeList from "./RecipeList";
-import styled from "styled-components";
 import { media } from "../styles/media";
 
 const Section = styled.section`
@@ -38,16 +38,10 @@ const Input = styled.input`
   font-size: 1rem;
   width: 100%;
   min-width: 0;
-  max-width: 100%;
 
   @media ${media.tablet} {
     min-width: 350px;
     width: auto;
-    font-size: 1.05rem;
-    max-width: none;
-  }
-  @media ${media.desktop} {
-    font-size: 1.1rem;
   }
 `;
 
@@ -60,8 +54,8 @@ const AddButton = styled.button`
   cursor: pointer;
   font-size: 1rem;
   width: 100%;
-  margin-left: 0;
   transition: background 0.2s;
+
   &:hover {
     background: #119a65;
   }
@@ -69,10 +63,26 @@ const AddButton = styled.button`
   @media ${media.tablet} {
     width: auto;
     margin-left: 0.5rem;
-    font-size: 1.05rem;
   }
-  @media ${media.desktop} {
-    font-size: 1.1rem;
+`;
+
+const IngredientsInfo = styled.div`
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+`;
+
+const IngredientTag = styled.span`
+  display: inline-block;
+  background: #e8f5e9;
+  color: #2e8b57;
+  padding: 0.3rem 0.6rem;
+  border-radius: 12px;
+  margin: 0.2rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+
+  &:hover {
+    background: #c8e6c9;
   }
 `;
 
@@ -95,10 +105,12 @@ const FilterLabel = styled.label`
   align-items: center;
   font-size: 1rem;
   margin-bottom: 0.5rem;
+  cursor: pointer;
 `;
 
 const Radio = styled.input`
   margin-right: 0.5rem;
+  cursor: pointer;
 `;
 
 const ShowButton = styled.button`
@@ -110,15 +122,19 @@ const ShowButton = styled.button`
   cursor: pointer;
   font-size: 1.1rem;
   margin-top: 1rem;
-  box-shadow: 0 4px 16px rgba(46,139,87,0.15);
+  box-shadow: 0 4px 16px rgba(46, 139, 87, 0.15);
   transition: background 0.2s;
+
   &:hover {
     background: #119a65;
   }
+
+  &:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
 `;
-const IngredientsInfo = styled.div`
-  margin-bottom: 1rem;
-`;
+
 const ErrorMsg = styled.p`
   color: #d32f2f;
   font-weight: 500;
@@ -128,56 +144,62 @@ const ErrorMsg = styled.p`
 const SearchRecipe = () => {
   const [input, setInput] = useState("");
   const {
-    ingredients, recipes, mode, loading, error,
-    setMode, addIngredient, searchRecipes
+    ingredients,
+    recipes,
+    mode,
+    loading,
+    error,
+    setMode,
+    addIngredient,
+    removeIngredient,
+    searchRecipes,
   } = useRecipeActions();
 
   const handleAdd = () => {
-    const trimmed = input.trim();
+    const trimmed = input.trim().toLowerCase();
     if (trimmed && !ingredients.includes(trimmed)) {
       addIngredient(trimmed);
       setInput("");
     }
   };
 
-  const handleSearch = () => {
-    if (ingredients.length > 0) {
-      searchRecipes();
-    }
-  };
-
-  const handleModeChange = (e) => {
-    setMode(e.target.value);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleAdd();
   };
 
   return (
     <Section>
-      <Form onSubmit={e => { e.preventDefault(); handleAdd(); }}>
+      <Form onSubmit={handleSubmit}>
         <Input
           type="text"
           placeholder="onion, garlic, chicken..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
         />
-        <AddButton 
-          type="submit">
-            Add
-        </AddButton>
+        <AddButton type="submit">Add</AddButton>
       </Form>
-        {ingredients.length > 0 && (
-     <IngredientsInfo>
-        <strong>Ingredients:</strong> {ingredients.join(", ")}
-     </IngredientsInfo>
-        )}
+
+      {ingredients.length > 0 && (
+        <IngredientsInfo>
+          <strong>Ingredients:</strong>{" "}
+          {ingredients.map((ing) => (
+            <IngredientTag key={ing} onClick={() => removeIngredient(ing)}>
+              {ing} ×
+            </IngredientTag>
+          ))}
+        </IngredientsInfo>
+      )}
+
       <FilterSection>
         <FilterTitle>Filter</FilterTitle>
         <FilterLabel>
           <Radio
             type="radio"
             name="filter"
-            value="only"
-            checked={mode === "only"}
-            onChange={handleModeChange}
+            value="exact"
+            checked={mode === "exact"}
+            onChange={() => setMode("exact")}
           />
           Use only these ingredients (no extras allowed)
         </FilterLabel>
@@ -187,17 +209,21 @@ const SearchRecipe = () => {
             name="filter"
             value="allowExtra"
             checked={mode === "allowExtra"}
-            onChange={handleModeChange}
+            onChange={() => setMode("allowExtra")}
           />
           Allow extra ingredients (recipe may contain more)
         </FilterLabel>
       </FilterSection>
-      <ShowButton type="button" onClick={handleSearch}>
-        Show recipes
+
+      <ShowButton onClick={searchRecipes} disabled={loading || ingredients.length < 1}>
+        {loading ? "Searching..." : "Show recipes"}
       </ShowButton>
-        {loading && <p>Loading...</p>}
-        {error && <ErrorMsg>{error}</ErrorMsg>}
-        {recipes && recipes.length > 0 && <RecipeList recipes={recipes} />}
+
+      {error && <ErrorMsg>{error}</ErrorMsg>}
+      {recipes && recipes.length > 0 && <RecipeList recipes={recipes} />}
+      {!loading && recipes.length === 0 && ingredients.length > 0 && !error && (
+        <p>No recipes found. Try different ingredients!</p>
+      )}
     </Section>
   );
 };
