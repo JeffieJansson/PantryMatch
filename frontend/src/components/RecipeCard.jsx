@@ -80,6 +80,21 @@ const Details = styled.div`
   }
 `;
 
+const SaveBtn = styled.button`
+  background: #ff9800;
+  border: none;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+
+  &:hover {
+    background: #e68900;
+  }
+`;
+
+
 const RecipeCard = ({ recipe }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [details, setDetails] = useState(null);
@@ -119,6 +134,9 @@ const RecipeCard = ({ recipe }) => {
       <ToggleBtn onClick={handleToggle}>
         {loadingDetails ? "Loading..." : isOpen ? "Show less" : "Show more"}
       </ToggleBtn>
+
+      <SaveBtn>Save Recipe</SaveBtn>
+
 
       {isOpen && details && (
         <Details>          
