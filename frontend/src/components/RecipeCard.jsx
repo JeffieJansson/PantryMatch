@@ -1,6 +1,9 @@
 import { useState } from "react";
 import styled from "styled-components";
+import { useUserStore } from "../stores/userStore";
+import { useNavigate } from "react-router-dom";
 import { fetchRecipeDetails } from "../api/api";
+import { saveRecipe } from "../api/api";
 
 const Card = styled.div`
   background: #fff;
@@ -96,6 +99,8 @@ const SaveBtn = styled.button`
 
 
 const RecipeCard = ({ recipe }) => {
+  const { user } = useUserStore();
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [details, setDetails] = useState(null);
   const [loadingDetails, setLoadingDetails] = useState(false);
@@ -114,6 +119,36 @@ const RecipeCard = ({ recipe }) => {
     }
     setIsOpen(!isOpen);
   };
+
+const handleSave = async () => {
+  if (!user) {
+    navigate("/member");
+    return;
+  }
+
+  try {
+    const recipeDetails = details || await fetchRecipeDetails(recipe.id);
+
+    await saveRecipe(
+      {
+        spoonacularId: recipeDetails.id,
+        title: recipeDetails.title,
+        image: recipe.image,
+        summary: recipeDetails.summary,
+        readyInMinutes: recipeDetails.readyInMinutes,
+        servings: recipeDetails.servings,
+        extendedIngredients: recipeDetails.extendedIngredients,
+        instructions: recipeDetails.instructions,
+      },
+      user.accessToken
+    );
+
+    alert("Recipe saved!");
+  } catch (error) {
+    alert(error.message);
+  }
+};
+
 
   return (
     <Card>
@@ -135,7 +170,7 @@ const RecipeCard = ({ recipe }) => {
         {loadingDetails ? "Loading..." : isOpen ? "Show less" : "Show more"}
       </ToggleBtn>
 
-      <SaveBtn>Save Recipe</SaveBtn>
+      <SaveBtn onClick={handleSave}>Save Recipe</SaveBtn>
 
 
       {isOpen && details && (
