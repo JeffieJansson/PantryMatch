@@ -6,6 +6,7 @@ import Home from "./pages/home";
 import { useUserStore } from "./stores/userStore";
 import About from "./pages/about";
 import GlobalStyles from "./GlobalStyles";
+import SavedRecipes from "./pages/SavedRecipes";
 
 
 export const App = () => {
@@ -42,7 +43,7 @@ export const App = () => {
         <Route
           path="/saved"
           element={
-            user ? <h2>Saved Recipes</h2> : <Navigate to="/member" />
+            user ? <SavedRecipes /> : <Navigate to="/member" />
           }
         />
 
