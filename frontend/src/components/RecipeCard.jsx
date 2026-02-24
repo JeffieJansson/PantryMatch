@@ -4,11 +4,12 @@ import { useUserStore } from "../stores/userStore";
 import { useNavigate } from "react-router-dom";
 import { fetchRecipeDetails } from "../api/api";
 import { saveRecipe } from "../api/api";
+import { media } from "../styles/media";
 
 const Card = styled.div`
   background: #fff;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   padding: 1rem;
   margin-bottom: 1.5rem;
 `;
@@ -47,6 +48,13 @@ const Missing = styled.span`
   color: #ff6b6b;
 `;
 
+const BtnRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 1rem;
+`;
+
 const ToggleBtn = styled.button`
   background: none;
   border: 1px solid #2e8b57;
@@ -61,6 +69,22 @@ const ToggleBtn = styled.button`
   &:hover {
     background: #2e8b57;
     color: white;
+  }
+`;
+
+const SaveBtn = styled.button`
+  background: #ff9800;
+  border: none;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+
+  &:hover {
+    background: #e68900;
   }
 `;
 
@@ -80,20 +104,6 @@ const Details = styled.div`
 
   li {
     margin: 0.3rem 0;
-  }
-`;
-
-const SaveBtn = styled.button`
-  background: #ff9800;
-  border: none;
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 0.5rem;
-
-  &:hover {
-    background: #e68900;
   }
 `;
 
@@ -166,12 +176,13 @@ const handleSave = async () => {
         </Missing>
       </IngredientInfo>
 
+      <BtnRow>
       <ToggleBtn onClick={handleToggle}>
         {loadingDetails ? "Loading..." : isOpen ? "Show less" : "Show more"}
       </ToggleBtn>
 
       <SaveBtn onClick={handleSave}>Save Recipe</SaveBtn>
-
+      </BtnRow>
 
       {isOpen && details && (
         <Details>          

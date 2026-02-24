@@ -31,11 +31,11 @@ const Subtitle = styled.p`
   color: #666;
   margin-bottom: 2.5rem;
 `;
-
 const RecipeGrid = styled.div`
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
 
   @media ${media.tablet} {
     grid-template-columns: repeat(2, 1fr);
@@ -45,7 +45,7 @@ const RecipeGrid = styled.div`
 const Card = styled.div`
   background: #fff;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   padding: 1rem;
 `;
 
