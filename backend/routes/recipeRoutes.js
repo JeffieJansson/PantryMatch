@@ -7,9 +7,9 @@ import authenticateUser from "../middleware/authMiddleware.js";
 const router = express.Router();
 
 
-// (GET)Search for recipes based on ingredients and mode (allowExtra or exact)
+// (GET) Search for recipes based on ingredients and mode (allowExtra or exact), diet, intolerances complexSearch endpoint
 router.get("/search", async (req, res) => {
-  const { ingredients, mode } = req.query;
+  const { ingredients, mode, lactoseFree, dairyFree, glutenFree, vegetarian, vegan } = req.query;
 
   if (!ingredients) {
     return res.status(400).json({
@@ -28,37 +28,53 @@ router.get("/search", async (req, res) => {
       response: null,
     });
   }
-  //  ingredient list for the API call
+
+  // Diet filters
+  let dietFilters = [];
+  if (vegetarian === "true") dietFilters.push("vegetarian");
+  if (vegan === "true") dietFilters.push("vegan");
+
+  // Intolerance filters
+  let intoleranceFilters = [];
+  if (lactoseFree === "true") intoleranceFilters.push("lactose");
+  if (dairyFree === "true") intoleranceFilters.push("dairy");
+  if (glutenFree === "true") intoleranceFilters.push("gluten");
+
+  // query params for complexSearch
   try {
     const params = {
-      ingredients: ingredientList.join(","),
+      includeIngredients: ingredientList.join(","),
       number: 15,
-      ranking: 2,
-      ignorePantry: mode === "exact",
+      diet: dietFilters.join(","),
+      intolerances: intoleranceFilters.join(","),
+      sort: mode === "exact" ? "min-missing-ingredients" : "max-used-ingredients",
+      addRecipeInformation: true,
       apiKey: process.env.SPOONACULAR_API_KEY,
     };
+
     const response = await axios.get(
-      "https://api.spoonacular.com/recipes/findByIngredients",
+      "https://api.spoonacular.com/recipes/complexSearch",
       { params }
     );
-    // Extract recipes from response, handle case where data or results might be missing
 
-    const recipes = response.data.map(recipe => ({
+    // Extract and format recipes with usedIngredients and missedIngredients arrays
+    const recipes = response.data.results.map(recipe => ({
       id: recipe.id,
       title: recipe.title,
       image: recipe.image,
-      readyInMinutes: recipe.readyInMinutes ?? null,
-      servings: recipe.servings ?? null,
+      readyInMinutes: recipe.readyInMinutes || null,
+      servings: recipe.servings || null,
       usedIngredients: recipe.usedIngredients || [],
       missedIngredients: recipe.missedIngredients || [],
     }));
 
     res.status(200).json({
       success: true,
-      message: "Recipes fetched from Spoonacular",
+      message: "Recipes fetched from Spoonacular complexSearch",
       response: recipes,
     });
   } catch (error) {
+    console.error("Spoonacular complexSearch error:", error.response?.data || error.message);
     res.status(500).json({
       success: false,
       message: "Failed to fetch recipes from Spoonacular",

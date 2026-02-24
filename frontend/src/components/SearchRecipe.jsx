@@ -149,6 +149,8 @@ const SearchRecipe = () => {
     mode,
     loading,
     error,
+    filters,
+    setFilters,
     setMode,
     addIngredient,
     removeIngredient,
@@ -166,6 +168,10 @@ const SearchRecipe = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     handleAdd();
+  };
+
+  const toggleFilter = (key) => {
+    setFilters({ ...filters, [key]: !filters[key] });
   };
 
   return (
@@ -212,6 +218,48 @@ const SearchRecipe = () => {
             onChange={() => setMode("allowExtra")}
           />
           Allow extra ingredients (recipe may contain more)
+        </FilterLabel>
+
+        {/* Diet and Intolerance filters */}
+        <FilterLabel>
+          <input
+            type="checkbox"
+            checked={filters.vegetarian}
+            onChange={() => toggleFilter("vegetarian")}
+          />
+          Vegetarian
+        </FilterLabel>
+        <FilterLabel>
+          <input
+            type="checkbox"
+            checked={filters.vegan}
+            onChange={() => toggleFilter("vegan")}
+          />
+          Vegan
+        </FilterLabel>
+        <FilterLabel>
+          <input
+            type="checkbox"
+            checked={filters.lactoseFree}
+            onChange={() => toggleFilter("lactoseFree")}
+          />
+          Lactose Free
+        </FilterLabel>
+        <FilterLabel>
+          <input
+            type="checkbox"
+            checked={filters.dairyFree}
+            onChange={() => toggleFilter("dairyFree")}
+          />
+          Dairy Free
+        </FilterLabel>
+        <FilterLabel>
+          <input
+            type="checkbox"
+            checked={filters.glutenFree}
+            onChange={() => toggleFilter("glutenFree")}
+          />
+          Gluten Free
         </FilterLabel>
       </FilterSection>
 

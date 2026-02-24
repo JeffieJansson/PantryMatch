@@ -1,6 +1,6 @@
 
-//export const API_URL = 'https://pantrymatch.onrender.com';
-export const API_URL = 'http://localhost:8080';
+export const API_URL = 'https://pantrymatch.onrender.com';
+//export const API_URL = 'http://localhost:8080';
 
 // Helper to handle fetch responses
 async function handleResponse(response) {
@@ -11,16 +11,19 @@ async function handleResponse(response) {
   return response.json();
 }
 
-// Fetch recipes by ingredients from backend API
-export async function fetchRecipeByIngredients(ingredients, mode = "allowExtra") {
-  const query = ingredients.join(",");
-  const params = new URLSearchParams({ 
-    ingredients: query,
-    mode: mode
+// Fetch recipes by ingredients with filters from backend API
+export async function fetchRecipeByIngredients(ingredients, mode = "allowExtra", filters = {}) {
+  const params = new URLSearchParams({
+    ingredients: ingredients.join(","),
+    mode,
+    vegetarian: filters.vegetarian ? "true" : "false",
+    vegan: filters.vegan ? "true" : "false",
+    lactoseFree: filters.lactoseFree ? "true" : "false",
+    dairyFree: filters.dairyFree ? "true" : "false",
+    glutenFree: filters.glutenFree ? "true" : "false",
   });
-  const res = await fetch(`${API_URL}/recipes/search?${params}`);
+  const res = await fetch(`${API_URL}/recipes/search?${params.toString()}`);
   const data = await handleResponse(res);
-  console.log("[fetchRecipeByIngredients] API response:", data.response);
   return data.response;
 }
 

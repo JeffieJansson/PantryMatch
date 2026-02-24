@@ -3,11 +3,19 @@ import { create } from "zustand";
 export const useRecipeStore = create((set) => ({
   ingredients: [],
   recipes: [],
-  mode: "allowExtra", 
+  mode: "allowExtra",
   loading: false,
   error: null,
+  filters: {
+    vegetarian: false,
+    vegan: false,
+    lactoseFree: false,
+    dairyFree: false,
+    glutenFree: false,
+  },
 
-  setMode: (mode) => set({ mode }), 
+  setMode: (mode) => set({ mode }),
+  setFilters: (filters) => set({ filters }),
 
   addIngredient: (ing) =>
     set((state) => ({
