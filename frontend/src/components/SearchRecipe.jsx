@@ -221,6 +221,7 @@ const SearchRecipe = () => {
         </FilterLabel>
 
         {/* Diet and Intolerance filters */}
+        <FilterTitle>Diets</FilterTitle>
         <FilterLabel>
           <input
             type="checkbox"
