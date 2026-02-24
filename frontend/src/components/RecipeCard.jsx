@@ -198,7 +198,17 @@ const handleSave = async () => {
           </ul>
 
           <h4>Instructions:</h4>
-          <p>{details.instructions || "No instructions available"}</p>
+          {details.analyzedInstructions?.length > 0 ? (
+            <ol>
+              {details.analyzedInstructions[0].steps.map((step) => (
+                <li key={step.number}>{step.step}</li>
+              ))}
+            </ol>
+          ) : details.instructions ? (
+            <div dangerouslySetInnerHTML={{ __html: details.instructions }} />
+          ) : (
+            <p>No instructions available</p>
+          )}
         </Details>
       )}
     </Card>
