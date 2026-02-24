@@ -43,9 +43,7 @@ const Member = ({ user, isSigningUp, setIsSigningUp, handleLogin, handleLogout }
         <p>Sign up or log in and start discovering recipes based on what you have at home</p>
         <p>And save your favorite recipes</p>
       </Intro>
-      {user ? (
-        <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
-      ) : (
+      {!user && (
         <AuthContainer>
           {isSigningUp ? (
             <SignupForm handleLogin={handleLogin} onToggleAuth={() => setIsSigningUp(false)} />

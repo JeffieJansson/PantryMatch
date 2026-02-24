@@ -40,12 +40,14 @@ export const App = () => {
         />
 
         {/* Protected/Auth route */}
-        <Route
-          path="/saved"
-          element={
-            user ? <SavedRecipes /> : <Navigate to="/member" />
-          }
-        />
+        <Route 
+        path="/savedrecipes" 
+        element={
+          user ? 
+          <SavedRecipes /> 
+          : 
+          <Navigate to="/member" />}
+           />
 
 
         <Route

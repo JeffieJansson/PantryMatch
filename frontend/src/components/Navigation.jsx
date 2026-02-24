@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { media } from "../styles/media";
 import { Link } from "react-router-dom";
+import { useUserStore } from "../stores/userStore";
 
 const NavContainer = styled.nav`
   display: flex;
@@ -68,23 +69,32 @@ const NavLink = styled(Link)`
   }
 `;
 
-const Navigation = () => (
-  <NavContainer>
-    <NavList>
-      <NavItem>
-        <NavLink to="/">Home</NavLink>
-      </NavItem>
-      <NavItem>
-        <NavLink to="/saved">Saved Recipes</NavLink>
-      </NavItem>
-      <NavItem>
-        <NavLink to="/about">About</NavLink>
-      </NavItem>
-      <NavItem>
-        <NavLink to="/member">Login</NavLink>
-      </NavItem>
-    </NavList>
-  </NavContainer>
-);
+const Navigation = () => {
+  const { user, logout } = useUserStore();
+  return (
+    <NavContainer>
+      <NavList>
+        <NavItem>
+          <NavLink to="/">Home</NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink to="/about">About</NavLink>
+        </NavItem>
+        {user && (
+          <NavItem>
+            <NavLink to="/savedrecipes">Saved Recipes</NavLink>
+          </NavItem>
+        )}
+        <NavItem>
+          {user ? (
+            <button onClick={logout} style={{ background: "none", border: "none", color: "#2e8b57", cursor: "pointer", fontSize: "1rem" }}>Logout</button>
+          ) : (
+            <NavLink to="/member">Login</NavLink>
+          )}
+        </NavItem>
+      </NavList>
+    </NavContainer>
+  );
+};
 
 export default Navigation;
