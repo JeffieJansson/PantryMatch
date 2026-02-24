@@ -91,6 +91,7 @@ router.get("/details/:id", async (req, res) => {
         title: details.title,
         summary: details.summary,
         instructions: details.instructions,
+        analyzedInstructions: details.analyzedInstructions,
         extendedIngredients: details.extendedIngredients,
         readyInMinutes: details.readyInMinutes,
         servings: details.servings,
