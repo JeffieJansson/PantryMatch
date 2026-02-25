@@ -1,5 +1,4 @@
 import { useRecipeStore } from "../stores/recipeStore";
-import { useState } from "react";
 import { fetchRecipeByIngredients } from "../api/api";
 
 export const useRecipeActions = () => {
@@ -7,23 +6,18 @@ export const useRecipeActions = () => {
     ingredients,
     recipes,
     mode,
+    filters,
     loading,
     error,
     setRecipes,
     setLoading,
     setError,
     setMode,
+    setFilters,
     addIngredient,
     removeIngredient,
   } = useRecipeStore();
 
-  const [filters, setFilters] = useState({
-    vegetarian: false,
-    vegan: false,
-    lactoseFree: false,
-    dairyFree: false,
-    glutenFree: false,
-  });
 
   const searchRecipes = async () => {
     if (ingredients.length < 1) {
@@ -47,6 +41,7 @@ export const useRecipeActions = () => {
     ingredients,
     recipes,
     mode,
+    filters,
     loading,
     error,
     filters,
