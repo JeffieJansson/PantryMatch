@@ -29,43 +29,77 @@ router.get("/search", async (req, res) => {
     });
   }
 
-  // Diet filters
-  let dietFilters = [];
-  if (vegetarian === "true") dietFilters.push("vegetarian");
-  if (vegan === "true") dietFilters.push("vegan");
-
-  // Intolerance filters
-  let intoleranceFilters = [];
-  if (lactoseFree === "true") intoleranceFilters.push("lactose");
-  if (dairyFree === "true") intoleranceFilters.push("dairy");
-  if (glutenFree === "true") intoleranceFilters.push("gluten");
+  // filter and diet strings for Spoonacular API
+  const diet = [
+    vegetarian === "true" ? "vegetarian" : null, 
+    vegan === "true" ? "vegan" : null
+      ]
+    .filter(Boolean).join(",");
+  const intolerances = [
+    lactoseFree === "true" ? "lactose" : null, 
+    dairyFree === "true" ? "dairy" : null, 
+    glutenFree === "true" ? "gluten" : null
+      ]
+    .filter(Boolean).join(",");
 
   // query params for complexSearch
   try {
     const params = {
       includeIngredients: ingredientList.join(","),
       number: 15,
-      diet: dietFilters.join(","),
-      intolerances: intoleranceFilters.join(","),
+      diet,
+      intolerances,
       sort: mode === "exact" ? "min-missing-ingredients" : "max-used-ingredients",
       addRecipeInformation: true,
       apiKey: process.env.SPOONACULAR_API_KEY,
     };
+
+    //normalization for comparison
+    const normalize = (name) => name
+      .toLowerCase()
+      .replace(/[^a-z\s]/g, "")
+      .replace(/\b(red|green|yellow|fresh|dried|large|small|medium)\b/g, "")
+      .replace(/\b(onions|tomatoes|potatoes|carrots|peppers)\b/g, (m) => m.slice(0, -1))
+      .replace(/s$/, "")
+      .trim();
 
     const response = await axios.get(
       "https://api.spoonacular.com/recipes/complexSearch",
       { params }
     );
 
-    // Extract and format recipes with usedIngredients and missedIngredients arrays
-    const recipes = response.data.results.map(recipe => ({
-      id: recipe.id,
-      title: recipe.title,
-      image: recipe.image,
-      readyInMinutes: recipe.readyInMinutes || null,
-      servings: recipe.servings || null,
-      usedIngredients: recipe.usedIngredients || [],
-      missedIngredients: recipe.missedIngredients || [],
+    const userNorm = ingredientList.map(normalize);
+
+    // fetch details and calculate matched/missed ingredients
+    const recipes = await Promise.all(response.data.results.map(async (recipe) => {
+      let extendedIngredients = [];
+      try {
+        const details = await axios.get(
+          `https://api.spoonacular.com/recipes/${recipe.id}/information`,
+          { params: { apiKey: process.env.SPOONACULAR_API_KEY } }
+        );
+        extendedIngredients = details.data.extendedIngredients || [];
+      } catch (err) {
+        // If details cannot be fetched, leave the ingredient list empty
+      }
+
+      const usedIngredients = [];
+      const missedIngredients = [];
+      for (const ing of extendedIngredients) {
+        const ingNorm = normalize(ing.name);
+        const match = userNorm.some(userIng => ingNorm.includes(userIng) || userIng.includes(ingNorm));
+        if (match) {
+          usedIngredients.push(ing);
+        } else {
+          missedIngredients.push(ing);
+        }
+      }
+
+      return {
+        ...recipe,
+        usedIngredients,
+        missedIngredients,
+      };
     }));
 
     res.status(200).json({
