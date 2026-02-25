@@ -166,13 +166,13 @@ const handleSave = async () => {
       <Title>{recipe.title}</Title>
       <IngredientInfo>
         <Matched>
-          ✅ Matched: {recipe.usedIngredients?.map((i) => i.name).join(", ") || "No matched ingredients"}
+          ✅ Matched: {recipe.usedIngredients?.map((i) => i.name || i.original).join(", ") || "No matched ingredients"}
         </Matched>
       </IngredientInfo>
 
       <IngredientInfo>
         <Missing>
-          ❌ Missing: {recipe.missedIngredients?.map((i) => i.name).join(", ") || "No missing ingredients"}
+          ❌ Missing: {recipe.missedIngredients?.map((i) => i.name || i.original).join(", ") || "No missing ingredients"}
         </Missing>
       </IngredientInfo>
 
