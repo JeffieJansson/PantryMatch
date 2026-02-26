@@ -9,7 +9,6 @@ export const useRecipeStore = create((set) => ({
   filters: {
     vegetarian: false,
     vegan: false,
-    lactoseFree: false,
     dairyFree: false,
     glutenFree: false,
   },

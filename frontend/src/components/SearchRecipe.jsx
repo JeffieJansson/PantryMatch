@@ -241,14 +241,6 @@ const SearchRecipe = () => {
         <FilterLabel>
           <input
             type="checkbox"
-            checked={filters.lactoseFree}
-            onChange={() => toggleFilter("lactoseFree")}
-          />
-          Lactose Free
-        </FilterLabel>
-        <FilterLabel>
-          <input
-            type="checkbox"
             checked={filters.dairyFree}
             onChange={() => toggleFilter("dairyFree")}
           />

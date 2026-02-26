@@ -36,9 +36,9 @@ router.get("/search", async (req, res) => {
       ]
     .filter(Boolean).join(",");
   const intolerances = [
-    lactoseFree === "true" ? "lactose" : null, 
     dairyFree === "true" ? "dairy" : null, 
     glutenFree === "true" ? "gluten" : null
+
       ]
     .filter(Boolean).join(",");
 
