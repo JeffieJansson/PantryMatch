@@ -9,7 +9,7 @@ const router = express.Router();
 
 // (GET) Search for recipes based on ingredients and mode (allowExtra or exact), diet, intolerances complexSearch endpoint
 router.get("/search", async (req, res) => {
-  const { ingredients, mode, lactoseFree, dairyFree, glutenFree, vegetarian, vegan } = req.query;
+    const { ingredients, mode, dairyFree, glutenFree, vegetarian, vegan } = req.query;
 
   if (!ingredients) {
     return res.status(400).json({
@@ -19,28 +19,28 @@ router.get("/search", async (req, res) => {
     });
   }
 
-  // split ingredients by comma and trim whitespace, also filter out empty strings
-  const ingredientList = ingredients.split(",").map(i => i.trim()).filter(Boolean);
-  if (ingredientList.length < 1) {
-    return res.status(400).json({
-      success: false,
-      message: "Please provide at least 1 ingredient",
-      response: null,
-    });
-  }
+    // split ingredients by comma and trim whitespace, also filter out empty strings
+    const ingredientList = ingredients.split(",").map(i => i.trim()).filter(Boolean);
+    if (ingredientList.length < 1) {
+      return res.status(400).json({
+        success: false,
+        message: "Please provide at least 1 ingredient",
+        response: null,
+      });
+    }
 
-  // filter and diet strings for Spoonacular API
-  const diet = [
-    vegetarian === "true" ? "vegetarian" : null, 
-    vegan === "true" ? "vegan" : null
-      ]
-    .filter(Boolean).join(",");
-  const intolerances = [
-    dairyFree === "true" ? "dairy" : null, 
-    glutenFree === "true" ? "gluten" : null
+    // filter and diet strings for Spoonacular API
+    const diet = [
+      vegetarian === "true" ? "vegetarian" : null, 
+      vegan === "true" ? "vegan" : null
+        ]
+      .filter(Boolean).join(",");
+    const intolerances = [
+      dairyFree === "true" ? "dairy" : null, 
+      glutenFree === "true" ? "gluten" : null
 
-      ]
-    .filter(Boolean).join(",");
+        ]
+      .filter(Boolean).join(",");
 
   // query params for complexSearch
   try {
@@ -59,7 +59,16 @@ router.get("/search", async (req, res) => {
       .toLowerCase()
       .replace(/[^a-z\s]/g, "")
       .replace(/\b(red|green|yellow|fresh|dried|large|small|medium)\b/g, "")
-      .replace(/\b(onions|tomatoes|potatoes|carrots|peppers)\b/g, (m) => m.slice(0, -1))
+      .replace(/\b(onions|tomatoes|potatoes|carrots|peppers)\b/g, (m) => {
+        const singularMap = {
+          onions: "onion",
+          tomatoes: "tomato",
+          potatoes: "potato",
+          carrots: "carrot",
+          peppers: "pepper",
+        };
+        return singularMap[m] || m;
+      })
       .replace(/s$/, "")
       .trim();
 
@@ -73,27 +82,39 @@ router.get("/search", async (req, res) => {
     // fetch details and calculate matched/missed ingredients
     const recipes = await Promise.all(response.data.results.map(async (recipe) => {
       let extendedIngredients = [];
+
       try {
         const details = await axios.get(
           `https://api.spoonacular.com/recipes/${recipe.id}/information`,
           { params: { apiKey: process.env.SPOONACULAR_API_KEY } }
         );
         extendedIngredients = details.data.extendedIngredients || [];
+      
       } catch (err) {
+        console.error(`Failed to fetch details for recipe ID ${recipe.id}:`, err.response?.data || err.message);
         // If details cannot be fetched, leave the ingredient list empty
       }
 
-      const usedIngredients = [];
-      const missedIngredients = [];
-      for (const ing of extendedIngredients) {
-        const ingNorm = normalize(ing.name);
-        const match = userNorm.some(userIng => ingNorm.includes(userIng) || userIng.includes(ingNorm));
-        if (match) {
-          usedIngredients.push(ing);
-        } else {
-          missedIngredients.push(ing);
-        }
+    const usedIngredients = [];
+    const missedIngredients = [];
+      
+    for (
+      const ing of extendedIngredients
+    ) {
+      const ingNorm = normalize(ing.name);
+
+      const match = userNorm.some(userIng => 
+        ingNorm.includes(userIng) 
+        || 
+        userIng.includes(ingNorm)
+      );
+      
+      if (match) {
+        usedIngredients.push(ing);
+      } else {
+        missedIngredients.push(ing);
       }
+    }
 
       return {
         ...recipe,
@@ -107,6 +128,7 @@ router.get("/search", async (req, res) => {
       message: "Recipes fetched from Spoonacular complexSearch",
       response: recipes,
     });
+
   } catch (error) {
     console.error("Spoonacular complexSearch error:", error.response?.data || error.message);
     res.status(500).json({
@@ -132,7 +154,7 @@ router.get("/details/:id", async (req, res) => {
       }
     );
 
-    const details = response.data;
+  const details = response.data;
 
     res.status(200).json({
       success: true,
@@ -147,6 +169,7 @@ router.get("/details/:id", async (req, res) => {
         servings: details.servings,
       }
     });
+    
   } catch (error) {
     console.error("Spoonacular details error:", error.response?.data || error.message);
     res.status(500).json({

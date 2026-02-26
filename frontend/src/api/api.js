@@ -18,7 +18,6 @@ export async function fetchRecipeByIngredients(ingredients, mode = "allowExtra",
     mode,
     vegetarian: filters.vegetarian ? "true" : "false",
     vegan: filters.vegan ? "true" : "false",
-    lactoseFree: filters.lactoseFree ? "true" : "false",
     dairyFree: filters.dairyFree ? "true" : "false",
     glutenFree: filters.glutenFree ? "true" : "false",
   });
