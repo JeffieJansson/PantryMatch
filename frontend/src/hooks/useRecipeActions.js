@@ -14,6 +14,8 @@ export const useRecipeActions = () => {
     setError,
     setMode,
     setFilters,
+    hasSearched,
+    setHasSearched,
     addIngredient,
     removeIngredient,
   } = useRecipeStore();
@@ -26,6 +28,7 @@ export const useRecipeActions = () => {
     }
     setLoading(true);
     setError(null);
+    setHasSearched(true);
     try {
       const data = await fetchRecipeByIngredients(ingredients, mode, filters);
       setRecipes(data);
@@ -44,7 +47,7 @@ export const useRecipeActions = () => {
     filters,
     loading,
     error,
-    filters,
+    hasSearched,
     setFilters,
     setMode,
     addIngredient,

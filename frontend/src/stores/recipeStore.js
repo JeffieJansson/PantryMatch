@@ -5,6 +5,7 @@ export const useRecipeStore = create((set) => ({
   recipes: [],
   mode: "allowExtra",
   loading: false,
+  hasSearched: false,
   error: null,
   filters: {
     vegetarian: false,
@@ -28,6 +29,7 @@ export const useRecipeStore = create((set) => ({
 
   setRecipes: (recipes) => set({ recipes }),
   setLoading: (loading) => set({ loading }),
+  setHasSearched: (hasSearched) => set({ hasSearched }),
   setError: (error) => set({ error }),
   clearRecipes: () => set({ recipes: [] }),
 }));

@@ -149,6 +149,7 @@ const SearchRecipe = () => {
     mode,
     loading,
     error,
+    hasSearched,
     filters,
     setFilters,
     setMode,
@@ -265,7 +266,7 @@ const SearchRecipe = () => {
 
       {error && <ErrorMsg>{error}</ErrorMsg>}
       {recipes && recipes.length > 0 && <RecipeList recipes={recipes} />}
-      {!loading && recipes.length === 0 && ingredients.length > 0 && !error && (
+      {hasSearched && !loading && !error && recipes.length === 0 && (
         <p>No recipes found. Try different ingredients!</p>
       )}
     </Section>
