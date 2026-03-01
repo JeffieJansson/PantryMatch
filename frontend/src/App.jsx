@@ -5,7 +5,7 @@ import Member from "./pages/member";
 import Home from "./pages/home";
 import { useUserStore } from "./stores/userStore";
 import About from "./pages/about";
-import GlobalStyles from "./GlobalStyles";
+import GlobalStyles from "./styles/GlobalStyles";
 import SavedRecipes from "./pages/SavedRecipes";
 
 
