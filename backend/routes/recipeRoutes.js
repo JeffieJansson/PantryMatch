@@ -49,7 +49,6 @@ router.get("/search", async (req, res) => {
       .filter(Boolean)
       .join(",");
 
-  // query params for complexSearch
   try {
     const params = {
       includeIngredients: ingredientList.join(","),
@@ -58,6 +57,7 @@ router.get("/search", async (req, res) => {
       intolerances,
       sort: mode === "exact" ? "min-missing-ingredients" : "max-used-ingredients",
       addRecipeInformation: true,
+      fillIngredients: true,
       apiKey: process.env.SPOONACULAR_API_KEY,
     };
 
