@@ -12,16 +12,18 @@ const Title = styled.h2`
 `;
 
 const RecipeGrid = styled.div`
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr;
   gap: 2rem;
   margin: 2rem 0;
+  align-items: start;
 
   @media ${media.tablet} {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    align-items: stretch;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media ${media.desktop} {
+    grid-template-columns: repeat(3, 1fr);
   }
 `;
 

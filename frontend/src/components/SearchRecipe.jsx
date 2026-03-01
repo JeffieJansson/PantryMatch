@@ -53,14 +53,14 @@ const AddButton = styled.button`
   border-radius: 4px;
   cursor: pointer;
   font-size: 1rem;
-  width: 100%;
+  width: 90px;
   transition: background 0.2s;
 
   &:hover {
     background: #119a65;
   }
 
-  @media ${media.tablet} {
+  @media ${media.tablet}, ${media.desktop} {
     width: auto;
     margin-left: 0.5rem;
   }
@@ -220,7 +220,7 @@ const SearchRecipe = () => {
           Allow extra ingredients (recipe may contain more)
         </FilterLabel>
 
-        {/* Diet and Intolerance filters */}
+        {/* Diet and  filters */}
         <FilterTitle>Diets</FilterTitle>
         <FilterLabel>
           <input
@@ -238,6 +238,9 @@ const SearchRecipe = () => {
           />
           Vegan
         </FilterLabel>
+        
+        {/* Intolerance filters */}
+        <FilterTitle>Intolerances</FilterTitle>
         <FilterLabel>
           <input
             type="checkbox"
