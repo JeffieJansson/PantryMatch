@@ -20,7 +20,12 @@ router.get("/search", async (req, res) => {
   }
 
     // split ingredients by comma and trim whitespace, also filter out empty strings
-    const ingredientList = ingredients.split(",").map(i => i.trim()).filter(Boolean);
+    const ingredientList = 
+    ingredients.split(",")
+    .map(i => 
+      i.trim())
+    .filter(Boolean);
+
     if (ingredientList.length < 1) {
       return res.status(400).json({
         success: false,
@@ -33,14 +38,16 @@ router.get("/search", async (req, res) => {
     const diet = [
       vegetarian === "true" ? "vegetarian" : null, 
       vegan === "true" ? "vegan" : null
-        ]
-      .filter(Boolean).join(",");
+    ]
+      .filter(Boolean)
+      .join(",");
+
     const intolerances = [
       dairyFree === "true" ? "dairy" : null, 
       glutenFree === "true" ? "gluten" : null
-
-        ]
-      .filter(Boolean).join(",");
+    ]
+      .filter(Boolean)
+      .join(",");
 
   // query params for complexSearch
   try {
@@ -54,83 +61,34 @@ router.get("/search", async (req, res) => {
       apiKey: process.env.SPOONACULAR_API_KEY,
     };
 
-    //normalization for comparison
-    const normalize = (name) => name
-      .toLowerCase()
-      .replace(/[^a-z\s]/g, "")
-      .replace(/\b(red|green|yellow|fresh|dried|large|small|medium)\b/g, "")
-      .replace(/\b(onions|tomatoes|potatoes|carrots|peppers)\b/g, (m) => {
-        const singularMap = {
-          onions: "onion",
-          tomatoes: "tomato",
-          potatoes: "potato",
-          carrots: "carrot",
-          peppers: "pepper",
-        };
-        return singularMap[m] || m;
-      })
-      .replace(/s$/, "")
-      .trim();
 
     const response = await axios.get(
       "https://api.spoonacular.com/recipes/complexSearch",
       { params }
     );
 
-    const userNorm = ingredientList.map(normalize);
-
-    // fetch details and calculate matched/missed ingredients
-    const recipes = await Promise.all(response.data.results.map(async (recipe) => {
-      let extendedIngredients = [];
-
-      try {
-        const details = await axios.get(
-          `https://api.spoonacular.com/recipes/${recipe.id}/information`,
-          { params: { apiKey: process.env.SPOONACULAR_API_KEY } }
-        );
-        extendedIngredients = details.data.extendedIngredients || [];
-      
-      } catch (err) {
-        console.error(`Failed to fetch details for recipe ID ${recipe.id}:`, err.response?.data || err.message);
-        // If details cannot be fetched, leave the ingredient list empty
-      }
-
-    const usedIngredients = [];
-    const missedIngredients = [];
-      
-    for (
-      const ing of extendedIngredients
-    ) {
-      const ingNorm = normalize(ing.name);
-
-      const match = userNorm.some(userIng => 
-        ingNorm.includes(userIng) 
-        || 
-        userIng.includes(ingNorm)
-      );
-      
-      if (match) {
-        usedIngredients.push(ing);
-      } else {
-        missedIngredients.push(ing);
-      }
-    }
-
-      return {
-        ...recipe,
-        usedIngredients,
-        missedIngredients,
-      };
+    // fetching usedIngredients, missedIngredients, unusedIngredients, extendedIngredients and normalizing them
+    const recipes = response.data.results.map(recipe => ({
+      ...recipe,
+      usedIngredients: recipe.usedIngredients || [],
+      missedIngredients: recipe.missedIngredients || [],
+      unusedIngredients: recipe.unusedIngredients || [],
+      extendedIngredients: recipe.extendedIngredients || [],
     }));
+
+    // Filter out recipes with missing ingredients if mode is 'exact'
+    let filteredRecipes = recipes;
+    if (mode === "exact") {
+      filteredRecipes = recipes.filter(recipe => recipe.missedIngredients.length === 0);
+    }
 
     res.status(200).json({
       success: true,
       message: "Recipes fetched from Spoonacular complexSearch",
-      response: recipes,
+      response: filteredRecipes,
     });
 
   } catch (error) {
-    console.error("Spoonacular complexSearch error:", error.response?.data || error.message);
     res.status(500).json({
       success: false,
       message: "Failed to fetch recipes from Spoonacular",
@@ -171,7 +129,6 @@ router.get("/details/:id", async (req, res) => {
     });
     
   } catch (error) {
-    console.error("Spoonacular details error:", error.response?.data || error.message);
     res.status(500).json({
       success: false,
       message: "Failed to fetch recipe details",
