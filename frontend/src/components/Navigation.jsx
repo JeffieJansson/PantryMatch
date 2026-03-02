@@ -43,6 +43,8 @@ const NavList = styled.ul`
 
 const NavItem = styled.li`
   font-size: 1.1rem;
+  display: flex;
+  align-items: center;
 `;
 
 const NavLink = styled(Link)`
@@ -56,7 +58,32 @@ const NavLink = styled(Link)`
   transition: color 0.2s;
   padding: 0.2rem 0.3rem;
   &:hover {
-    color: #4e8cff;
+    text-decoration: underline;
+  }
+
+  @media ${media.tablet} {
+    font-size: 1.08rem;
+    padding: 0.3rem 0.5rem;
+  }
+  @media ${media.desktop} {
+    font-size: 1.1rem;
+    padding: 0.4rem 0.7rem;
+  }
+`;
+
+const LogoutBtn = styled.button`
+  background: none;
+  border: none;
+  color: #1A6A1A;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: inherit;
+  line-height: inherit;
+  transition: color 0.2s;
+  padding: 0.2rem 0.3rem;
+  &:hover {
+    text-decoration: underline;
   }
 
   @media ${media.tablet} {
@@ -87,7 +114,7 @@ const Navigation = () => {
         )}
         <NavItem>
           {user ? (
-            <button onClick={logout} style={{ background: "none", border: "none", color: "#2e8b57", cursor: "pointer", fontSize: "1rem" }}>Logout</button>
+            <LogoutBtn onClick={logout}>Logout</LogoutBtn>
           ) : (
             <NavLink to="/member">Login</NavLink>
           )}
