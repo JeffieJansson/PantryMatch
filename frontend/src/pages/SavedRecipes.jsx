@@ -7,17 +7,7 @@ import CopyButton from "../components/CopyButton";
 import LoadingSpinner from "../components/LoadingSpinner";
 
 const Container = styled.div`
-  max-width: 900px;
-  margin: 3rem auto;
-  padding: 2rem;
-  background: #ffffff;
-  border-radius: 1.5rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-
-  @media (max-width: 600px) {
-    padding: 1rem 0.5rem;
-    max-width: 98vw;
-  }
+  margin-top: 2rem;
 `;
 
 const Title = styled.h1`
@@ -34,29 +24,45 @@ const Subtitle = styled.p`
   margin-bottom: 2.5rem;
 `;
 const RecipeGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 2rem;
-  margin: 2rem 0;
-
-  @media ${media.tablet} {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 2rem auto;
+  max-width: 900px;
 `;
 
 const Card = styled.div`
   background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  padding: 1rem;
+  padding: 1.5rem 1rem;
+  border-bottom: 1px solid #e0e0e0;
+`;
+
+const CardTop = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  @media ${media.tablet}, ${media.desktop} {
+    flex-direction: row;
+  }
 `;
 
 const Image = styled.img`
   width: 100%;
-  height: 200px;
-  object-fit: cover;
   border-radius: 6px;
-  margin-bottom: 0.5rem;
+
+  @media ${media.tablet}, ${media.desktop} {
+    width: 250px;
+    height: 170px;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+`;
+
+const CardContent = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 `;
 
 const RecipeTitle = styled.h3`
@@ -72,6 +78,7 @@ const Info = styled.p`
 
 const ButtonRow = styled.div`
   display: flex;
+  justify-content: space-between;
   gap: 0.5rem;
   margin-top: 1rem;
 `;
@@ -214,7 +221,9 @@ const SavedRecipes = () => {
 
             return (
               <Card key={recipe._id}>
+            <CardTop>
                 {recipe.image && <Image src={recipe.image} alt={recipe.title} />}
+              <CardContent>
                 <RecipeTitle>{recipe.title}</RecipeTitle>
                 
                 <Info>
@@ -230,6 +239,8 @@ const SavedRecipes = () => {
                     Delete
                   </DeleteBtn>
                 </ButtonRow>
+              </CardContent>
+            </CardTop>
 
               {isExpanded && (
                   <Details>

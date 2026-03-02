@@ -1,6 +1,5 @@
 import RecipeCard from "./RecipeCard";
 import styled from "styled-components";
-import { media } from "../styles/media";
 
 const Container = styled.div`
   margin-top: 2rem;
@@ -12,19 +11,11 @@ const Title = styled.h2`
 `;
 
 const RecipeGrid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 2rem;
-  margin: 2rem 0;
-  align-items: start;
-
-  @media ${media.tablet} {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @media ${media.desktop} {
-    grid-template-columns: repeat(3, 1fr);
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 2rem auto;
+  max-width: 900px;
 `;
 
 

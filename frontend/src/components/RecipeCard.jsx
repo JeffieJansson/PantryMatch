@@ -5,19 +5,40 @@ import { useNavigate } from "react-router-dom";
 import { fetchRecipeDetails } from "../api/api";
 import { saveRecipe } from "../api/api";
 import CopyButton from "./CopyButton";
+import { media } from "../styles/media";
 
 const Card = styled.div`
   background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  padding: 1rem;
-  margin-bottom: 1.5rem;
+  padding: 1.5rem 1rem;
+  border-bottom: 1px solid #e0e0e0;
+`;
+
+const CardTop = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  @media ${media.tablet}, ${media.desktop} {
+    flex-direction: row;
+  }
 `;
 
 const Image = styled.img`
   width: 100%;
   border-radius: 6px;
-  margin-bottom: 0.5rem;
+
+  @media ${media.tablet}, ${media.desktop} {
+    width: 250px;
+    height: 170px;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+`;
+
+const CardContent = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 `;
 
 const Title = styled.h3`
@@ -162,7 +183,9 @@ const handleSave = async () => {
 
   return (
     <Card>
-      {recipe.image && <Image src={recipe.image} alt={recipe.title} />}
+      <CardTop>
+        {recipe.image && <Image src={recipe.image} alt={recipe.title} />}
+        <CardContent>
       <Title>{recipe.title}</Title>
       <IngredientInfo>
         <Matched>
@@ -184,6 +207,8 @@ const handleSave = async () => {
       <SaveBtn onClick={handleSave}>Save Recipe</SaveBtn>
 
       </BtnRow>
+        </CardContent>
+      </CardTop>
 
       {isOpen && details && (
         <Details>          
