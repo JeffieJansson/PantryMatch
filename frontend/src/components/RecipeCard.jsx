@@ -62,11 +62,11 @@ const IngredientInfo = styled.p`
 `;
 
 const Matched = styled.span`
-  color: #2e8b57;
+  color: #1D5334;
 `;
 
 const Missing = styled.span`
-  color: #ff6b6b;
+  color: #a40505;
 `;
 
 const BtnRow = styled.div`
@@ -78,8 +78,8 @@ const BtnRow = styled.div`
 
 const ToggleBtn = styled.button`
   background: none;
-  border: 1px solid #2e8b57;
-  color: #2e8b57;
+  border: 1px solid #1D5334;
+  color: #1D5334;
   padding: 0.5rem 1rem;
   border-radius: 4px;
   cursor: pointer;
@@ -88,25 +88,30 @@ const ToggleBtn = styled.button`
   transition: all 0.2s;
 
   &:hover {
-    background: #2e8b57;
+    background: #1D5334;
     color: white;
   }
 `;
 
 const SaveBtn = styled.button`
-  background: #ff9800;
+  background: #FFEACC;
   border: none;
-  color: white;
+  color: #1D5334;
   padding: 0.5rem 1rem;
   border-radius: 4px;
+  border: 1px solid #1D5334;
   cursor: pointer;
   margin-top: 0.5rem;
   font-size: 0.95rem;
   transition: all 0.2s;
 
-  &:hover {
-    background: #e68900;
-  }
+`;
+
+const SavedBtn = styled(SaveBtn)`
+  background: #e8f5e9;
+  color: #1D5334;
+  border: 1px solid #1D5334;
+  cursor: default;
 `;
 
 const Details = styled.div`
@@ -128,6 +133,12 @@ const Details = styled.div`
   }
 `;
 
+const ErrorMsg = styled.p`
+  color: #990606;
+  font-weight: 500;
+  margin: 1rem 0;
+`;
+
 
 const RecipeCard = ({ recipe }) => {
   const { user } = useUserStore();
@@ -135,6 +146,8 @@ const RecipeCard = ({ recipe }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [details, setDetails] = useState(null);
   const [loadingDetails, setLoadingDetails] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [error, setError] = useState("");
 
   const handleToggle = async () => {
     if (!isOpen && !details) {
@@ -143,7 +156,7 @@ const RecipeCard = ({ recipe }) => {
         const data = await fetchRecipeDetails(recipe.id);
         setDetails(data);
       } catch (err) {
-        console.error("Failed to fetch details:", err);
+        setError("Failed to fetch recipe details");
       } finally {
         setLoadingDetails(false);
       }
@@ -158,8 +171,12 @@ const handleSave = async () => {
   }
 
   try {
-    const recipeDetails = details || await fetchRecipeDetails(recipe.id);
+    let recipeDetails = details;
 
+    if (!recipeDetails) {
+      recipeDetails = await fetchRecipeDetails(recipe.id);
+      setDetails(recipeDetails);
+    }
     await saveRecipe(
       {
         spoonacularId: recipeDetails.id,
@@ -174,9 +191,14 @@ const handleSave = async () => {
       user.accessToken
     );
 
-    alert("Recipe saved!");
+    setSaved(true);
+    setError("");
   } catch (error) {
-    alert(error.message);
+    if (error.message === "Recipe already saved") {
+      setSaved(true);
+    } else {
+      setError(error.message);
+    }
   }
 };
 
@@ -204,9 +226,14 @@ const handleSave = async () => {
         {loadingDetails ? "Loading..." : isOpen ? "Show less" : "Show more"}
       </ToggleBtn>
 
+      {saved ? (
+        <SavedBtn disabled>Saved</SavedBtn>
+      ) : (
       <SaveBtn onClick={handleSave}>Save Recipe</SaveBtn>
+      )}
 
       </BtnRow>
+      {error && <ErrorMsg>{error}</ErrorMsg>}
         </CardContent>
       </CardTop>
 
