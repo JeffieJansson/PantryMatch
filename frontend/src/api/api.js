@@ -33,12 +33,6 @@ export async function fetchRecipeDetails(id) {
   return data.response;
 }
 
-// get details for a single recipe
-export async function fetchSavedRecipeDetails(id) {
-  const res = await fetch(`${API_URL}/recipes/saved/${id}`);
-  const data = await handleResponse(res);
-  return data.response;
-}
 
 // Save a recipe to the database for logged-in user (auth required)
 export async function saveRecipe(recipeData, token) {
