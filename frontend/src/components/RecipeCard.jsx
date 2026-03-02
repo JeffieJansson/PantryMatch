@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
+import { Copy, Check } from "lucide-react";
 import { useUserStore } from "../stores/userStore";
 import { useNavigate } from "react-router-dom";
 import { fetchRecipeDetails } from "../api/api";
@@ -107,6 +108,14 @@ const Details = styled.div`
   }
 `;
 
+const CopyBtn = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 0.9rem;
+  vertical-align: middle;
+`;
+
 
 const RecipeCard = ({ recipe }) => {
   const { user } = useUserStore();
@@ -114,6 +123,7 @@ const RecipeCard = ({ recipe }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [details, setDetails] = useState(null);
   const [loadingDetails, setLoadingDetails] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const handleToggle = async () => {
     if (!isOpen && !details) {
@@ -182,6 +192,7 @@ const handleSave = async () => {
       </ToggleBtn>
 
       <SaveBtn onClick={handleSave}>Save Recipe</SaveBtn>
+
       </BtnRow>
 
       {isOpen && details && (
@@ -190,6 +201,20 @@ const handleSave = async () => {
             ⏱️ {details.readyInMinutes !== null && details.readyInMinutes !== undefined ? `${details.readyInMinutes} min` : 'unknown time'}
             {' | '}
             🍽️ {details.servings !== null && details.servings !== undefined ? `${details.servings} servings` : 'unknown servings'}
+            <CopyBtn 
+               onClick={async () => {
+              let url = `https://spoonacular.com/recipes/${recipe.title.toLowerCase().replace(/\s+/g, "-")}-${recipe.id}`;
+              if (details?.sourceUrl) {
+                url = details.sourceUrl;
+              }
+              await navigator.clipboard.writeText(url);
+              setCopied(true);
+              setTimeout(() => setCopied(false), 2000);
+              }}
+              title={copied ? "Copied!" : "Copy link"}
+              >
+              {copied ? <Check size={16} color="#2e8b57" /> : <Copy size={16} color="#666" />}
+            </CopyBtn>
           </Info>
           {details.summary && (
             <div dangerouslySetInnerHTML={{ __html: details.summary }} />
