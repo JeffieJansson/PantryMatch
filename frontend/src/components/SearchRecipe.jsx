@@ -47,7 +47,7 @@ const Input = styled.input`
 `;
 
 const AddButton = styled.button`
-  background: #2e8b57;
+  background: #22633E;
   color: #fff;
   border: none;
   padding: 0.5rem 1.2rem;
@@ -57,9 +57,6 @@ const AddButton = styled.button`
   width: 90px;
   transition: background 0.2s;
 
-  &:hover {
-    background: #119a65;
-  }
 
   @media ${media.tablet}, ${media.desktop} {
     width: auto;
@@ -75,7 +72,7 @@ const IngredientsInfo = styled.div`
 const IngredientTag = styled.span`
   display: inline-block;
   background: #e8f5e9;
-  color: #2e8b57;
+  color: #1D5334;
   padding: 0.3rem 0.6rem;
   border-radius: 12px;
   margin: 0.2rem;
@@ -115,7 +112,7 @@ const Radio = styled.input`
 `;
 
 const ShowButton = styled.button`
-  background: #2e8b57;
+  background: #22633E;
   color: #fff;
   border: none;
   padding: 0.7rem 2rem;
@@ -126,9 +123,6 @@ const ShowButton = styled.button`
   box-shadow: 0 4px 16px rgba(46, 139, 87, 0.15);
   transition: background 0.2s;
 
-  &:hover {
-    background: #119a65;
-  }
 
   &:disabled {
     background: #ccc;
