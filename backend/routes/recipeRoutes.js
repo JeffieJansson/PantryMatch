@@ -125,6 +125,7 @@ router.get("/details/:id", async (req, res) => {
         extendedIngredients: details.extendedIngredients,
         readyInMinutes: details.readyInMinutes,
         servings: details.servings,
+        sourceUrl: details.sourceUrl,
       }
     });
     
