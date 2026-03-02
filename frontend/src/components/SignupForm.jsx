@@ -57,7 +57,7 @@ const StyledInput = styled.input`
 `;
 
 const StyledButton = styled.button`
-  background: #2e8b57;
+  background: #256b45;
   color: #fff;
   border: none;
   padding: 0.7rem 1.2rem;
@@ -67,7 +67,7 @@ const StyledButton = styled.button`
   font-size: 1rem;
   transition: background 0.2s;
   &:hover {
-    background: #256b45;
+    background: #1D5334;
   }
 `;
 
@@ -79,7 +79,7 @@ const AuthActions = styled.div`
 `;
 
 const ToggleAuth = styled.span`
-  color: #2e8b57;
+  color: #1D5334;
   cursor: pointer;
   font-size: 0.95rem;
   text-decoration: underline;
