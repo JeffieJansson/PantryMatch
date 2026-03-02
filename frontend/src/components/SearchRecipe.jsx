@@ -2,6 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import { useRecipeActions } from "../hooks/useRecipeActions";
 import RecipeList from "./RecipeList";
+import LoadingSpinner from "./LoadingSpinner";
 import { media } from "../styles/media";
 
 const Section = styled.section`
@@ -264,6 +265,7 @@ const SearchRecipe = () => {
         {loading ? "Searching..." : "Show recipes"}
       </ShowButton>
 
+      {loading && <LoadingSpinner />}
       {error && <ErrorMsg>{error}</ErrorMsg>}
       {recipes && recipes.length > 0 && <RecipeList recipes={recipes} />}
       {hasSearched && !loading && !error && recipes.length === 0 && (
