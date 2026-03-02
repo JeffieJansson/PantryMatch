@@ -146,7 +146,7 @@ const Hero = () => {
   return (
     <HeroSection>
       <LogoContainer>
-        <img src="/PantryMatch.svg" alt="PantryMatch Logo" />
+        <img src="/PantryMatch.svg" alt="PantryMatch Logo" loading="lazy" />
       </LogoContainer>
       
       <TitleWrapper>
