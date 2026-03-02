@@ -1,7 +1,6 @@
 import styled from "styled-components";
-import { motion } from "framer-motion";
 
-const Container = styled(motion.div)`
+const Container = styled.div`
   max-width: 900px;
   margin: 3rem auto;
   padding: 2rem;
@@ -63,17 +62,13 @@ const Footer = styled.div`
   margin-top: 3rem;
   padding-top: 1.5rem;
   border-top: 1px solid #eee;
-  color: #777;
+  color: #232222;
   font-size: 0.95rem;
 `;
 
 const About = () => {
   return (
-    <Container
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-    >
+    <Container>
       <Title>About PantryMatch</Title>
       <Subtitle>Find recipes with what you already have at home</Subtitle>
 
@@ -90,7 +85,7 @@ const About = () => {
         <SectionTitle>How It Works</SectionTitle>
         <Text>
           Simply enter the ingredients you have in your kitchen, choose your
-          preferred search mode, and get instant recipe suggestions. You can
+          preferred search filters, and get instant recipe suggestions. You can
           explore full cooking instructions and save your favorite recipes for
           later.
         </Text>
@@ -100,7 +95,7 @@ const About = () => {
         <SectionTitle>Main Features</SectionTitle>
         <FeatureList>
           <FeatureItem>Search recipes by ingredients</FeatureItem>
-          <FeatureItem>Filter: exact match or allow extra ingredients</FeatureItem>
+          <FeatureItem>Filter: exact match or allow extra ingredients, diets and intolerances</FeatureItem>
           <FeatureItem>View full recipe instructions</FeatureItem>
           <FeatureItem>Save favorite recipes (for logged-in users)</FeatureItem>
           <FeatureItem>Personal recipe history</FeatureItem>
