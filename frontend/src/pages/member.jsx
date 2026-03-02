@@ -20,7 +20,7 @@ const AuthContainer = styled.div`
   margin-top: 2rem;
 `;
 
-const Member = ({ user, isSigningUp, setIsSigningUp, handleLogin, handleLogout }) => {
+const Member = ({ isSigningUp, setIsSigningUp, handleLogin }) => {
   return (
     <>
       <Intro>
@@ -28,7 +28,6 @@ const Member = ({ user, isSigningUp, setIsSigningUp, handleLogin, handleLogout }
         <p>Sign up or log in and start discovering recipes based on what you have at home</p>
         <p>And save your favorite recipes</p>
       </Intro>
-      {!user && (
         <AuthContainer>
           {isSigningUp ? (
             <SignupForm handleLogin={handleLogin} onToggleAuth={() => setIsSigningUp(false)} />
@@ -36,7 +35,6 @@ const Member = ({ user, isSigningUp, setIsSigningUp, handleLogin, handleLogout }
             <LoginForm handleLogin={handleLogin} onToggleAuth={() => setIsSigningUp(true)} />
           )}
         </AuthContainer>
-      )}
     </>
   );
 };

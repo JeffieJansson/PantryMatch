@@ -20,6 +20,7 @@ export const App = () => {
       <Navigation />
       <GlobalStyles />
 
+      <main>
       <Routes>
 
         <Route
@@ -29,13 +30,15 @@ export const App = () => {
         <Route
           path="/member"
           element={
+            user ? (
+              <Navigate to="/" />
+            ) : (
             <Member
-              user={user}
               isSigningUp={isSigningUp}
               setIsSigningUp={setIsSigningUp}
               handleLogin={setUser}
-              handleLogout={logout}
             />
+            )
           }
         />
 
@@ -57,6 +60,7 @@ export const App = () => {
 
 
       </Routes>
+      </main>
     </BrowserRouter>
   );
 };
