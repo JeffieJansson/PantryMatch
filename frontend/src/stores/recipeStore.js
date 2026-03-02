@@ -31,5 +31,4 @@ export const useRecipeStore = create((set) => ({
   setLoading: (loading) => set({ loading }),
   setHasSearched: (hasSearched) => set({ hasSearched }),
   setError: (error) => set({ error }),
-  clearRecipes: () => set({ recipes: [] }),
 }));
