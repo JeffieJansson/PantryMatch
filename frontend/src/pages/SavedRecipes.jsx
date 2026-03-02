@@ -65,7 +65,7 @@ const CardContent = styled.div`
   flex-direction: column;
 `;
 
-const RecipeTitle = styled.h3`
+const RecipeTitle = styled.h2`
   margin: 0.5rem 0;
   color: #222;
 `;
@@ -85,8 +85,8 @@ const ButtonRow = styled.div`
 
 const ToggleBtn = styled.button`
   background: none;
-  border: 1px solid #2e8b57;
-  color: #2e8b57;
+  border: 1px solid #22633E;
+  color: #22633E;
   padding: 0.5rem 1rem;
   border-radius: 4px;
   cursor: pointer;
@@ -95,7 +95,7 @@ const ToggleBtn = styled.button`
   transition: all 0.2s;
 
   &:hover {
-    background: #2e8b57;
+    background: #22633E;
     color: white;
   }
 `;
@@ -124,6 +124,13 @@ const EmptyState = styled.div`
   }
 `;
 
+const ErrorMsg = styled.p`
+  color: #990606;
+  font-weight: 500;
+  margin: 1rem 0;
+  text-align: center;
+`;
+
 const Details = styled.div`
   margin-top: 1rem;
   padding-top: 1rem;
@@ -148,6 +155,7 @@ const SavedRecipes = () => {
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [deleteError, setDeleteError] = useState(null);
   const [expandedId, setExpandedId] = useState(null);
 
   useEffect(() => {
@@ -177,8 +185,9 @@ const SavedRecipes = () => {
     try {
       await deleteRecipe(recipeId, user.accessToken);
       setRecipes(recipes.filter(r => r._id !== recipeId));
+      setDeleteError(null);
     } catch (err) {
-      alert("Failed to delete recipe");
+      setDeleteError(err.message);
     }
   };
 
@@ -199,7 +208,7 @@ const SavedRecipes = () => {
     return (
       <Container>
         <Title>Saved Recipes</Title>
-        <p style={{ textAlign: 'center', color: '#c0392b' }}>Error: {error}</p>
+        <ErrorMsg>Error: {error}</ErrorMsg>
       </Container>
     );
   }
@@ -208,6 +217,7 @@ const SavedRecipes = () => {
     <Container>
       <Title>Saved Recipes</Title>
       <Subtitle>Your recipe collection</Subtitle>
+      {deleteError && <ErrorMsg>{deleteError}</ErrorMsg>}
 
       {recipes.length === 0 ? (
         <EmptyState>
