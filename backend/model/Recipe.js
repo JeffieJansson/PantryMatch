@@ -19,7 +19,6 @@ const recipeSchema = new mongoose.Schema({
   },
   title: String,
   image: String,
-  summary: String,
   readyInMinutes: Number,
   servings: Number,
   extendedIngredients: [ingredientSchema], // detailed ingredient info from Spoonacular
@@ -28,6 +27,17 @@ const recipeSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+    analyzedInstructions: [
+      {
+        name: String,
+        steps: [
+          {
+            number: Number,
+            step: String
+          }
+        ]
+      }
+    ],
 });
 
 const Recipe = mongoose.model("Recipe", recipeSchema);
