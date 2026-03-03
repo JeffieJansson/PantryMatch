@@ -255,10 +255,6 @@ const SavedRecipes = () => {
               {isExpanded && (
                   <Details>
                     <ShareButton url={recipe.sourceUrl || `https://spoonacular.com/recipes/${recipe.title.toLowerCase().replace(/\s+/g, "-")}-${recipe.spoonacularId}`} />
-                    {recipe.summary && (
-                      <div dangerouslySetInnerHTML={{ __html: recipe.summary }} />
-                    )}
-
                     <h4>Ingredients:</h4>
                       <ul>
                         {recipe.extendedIngredients?.map((ing, index) => (

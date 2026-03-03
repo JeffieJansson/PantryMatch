@@ -182,11 +182,11 @@ const handleSave = async () => {
         spoonacularId: recipeDetails.id,
         title: recipeDetails.title,
         image: recipe.image,
-        summary: recipeDetails.summary,
         readyInMinutes: recipeDetails.readyInMinutes,
         servings: recipeDetails.servings,
         extendedIngredients: recipeDetails.extendedIngredients,
         instructions: recipeDetails.instructions,
+        analyzedInstructions: recipeDetails.analyzedInstructions,
       },
       user.accessToken
     );
@@ -245,10 +245,6 @@ const handleSave = async () => {
             🍽️ {details.servings !== null && details.servings !== undefined ? `${details.servings} servings` : 'unknown servings'}
             <ShareButton url={details?.sourceUrl || `https://spoonacular.com/recipes/${recipe.title.toLowerCase().replace(/\s+/g, "-")}-${recipe.id}`} />
           </Info>
-          {details.summary && (
-            <div dangerouslySetInnerHTML={{ __html: details.summary }} />
-          )}
-
           <h4>All ingredients:</h4>
           <ul>
             {details.extendedIngredients

@@ -57,6 +57,8 @@ router.get("/search", async (req, res) => {
       intolerances,
       sort: mode === "exact" ? "min-missing-ingredients" : "max-used-ingredients",
       addRecipeInformation: true,
+      addRecipeInstructions: true,
+      instructionsRequired: true,
       fillIngredients: true,
       apiKey: process.env.SPOONACULAR_API_KEY,
     };
@@ -119,7 +121,6 @@ router.get("/details/:id", async (req, res) => {
       response: {
         id: details.id,
         title: details.title,
-        summary: details.summary,
         instructions: details.instructions,
         analyzedInstructions: details.analyzedInstructions,
         extendedIngredients: details.extendedIngredients,
