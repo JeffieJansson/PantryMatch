@@ -139,16 +139,23 @@ const ErrorMsg = styled.p`
   margin: 1rem 0;
 `;
 
+const DetailTitle = styled.h4`
+  margin-top: 1rem;
+  color: #222;
+`;
 
 const RecipeCard = ({ recipe }) => {
   const { user } = useUserStore();
   const navigate = useNavigate();
+  
+  // State
   const [isOpen, setIsOpen] = useState(false);
   const [details, setDetails] = useState(null);
   const [loadingDetails, setLoadingDetails] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
 
+  // handlers
   const handleToggle = async () => {
     if (!isOpen && !details) {
       setLoadingDetails(true);
@@ -164,101 +171,116 @@ const RecipeCard = ({ recipe }) => {
     setIsOpen(!isOpen);
   };
 
-const handleSave = async () => {
-  if (!user) {
-    navigate("/member");
-    return;
-  }
-
-  try {
-    let recipeDetails = details;
-
-    if (!recipeDetails) {
-      recipeDetails = await fetchRecipeDetails(recipe.id);
-      setDetails(recipeDetails);
+  const handleSave = async () => {
+    if (!user) {
+      navigate("/member");
+      return;
     }
-    await saveRecipe(
-      {
-        spoonacularId: recipeDetails.id,
-        title: recipeDetails.title,
-        image: recipe.image,
-        readyInMinutes: recipeDetails.readyInMinutes,
-        servings: recipeDetails.servings,
-        extendedIngredients: recipeDetails.extendedIngredients,
-        instructions: recipeDetails.instructions,
-        analyzedInstructions: recipeDetails.analyzedInstructions,
-      },
-      user.accessToken
-    );
 
-    setSaved(true);
-    setError("");
-  } catch (error) {
-    if (error.message === "Recipe already saved") {
+    try {
+      let recipeDetails = details;
+
+      if (!recipeDetails) {
+        recipeDetails = await fetchRecipeDetails(recipe.id);
+        setDetails(recipeDetails);
+      }
+
+      await saveRecipe(
+        {
+          spoonacularId: recipeDetails.id,
+          title: recipeDetails.title,
+          image: recipe.image,
+          readyInMinutes: recipeDetails.readyInMinutes,
+          servings: recipeDetails.servings,
+          extendedIngredients: recipeDetails.extendedIngredients,
+          instructions: recipeDetails.instructions,
+          analyzedInstructions: recipeDetails.analyzedInstructions,
+        },
+        user.accessToken
+      );
+
       setSaved(true);
-    } else {
-      setError(error.message);
+      setError("");
+    } catch (error) {
+      if (error.message === "Recipe already saved") {
+        setSaved(true);
+      } else {
+        setError(error.message);
+      }
     }
-  }
-};
+  };
 
+  // helper variables 
+  const matchedIngredients = recipe.usedIngredients
+    ?.map((i) => i.name || i.original)
+    .join(", ") || "No matched ingredients";
+
+  const missingIngredients = recipe.missedIngredients
+    ?.map((i) => i.name || i.original)
+    .join(", ") || "No missing ingredients";
+
+  const displayTime = details?.readyInMinutes 
+    ? `${details.readyInMinutes} min` 
+    : "unknown time";
+
+  const displayServings = details?.servings 
+    ? `${details.servings} servings` 
+    : "unknown servings";
+
+  const recipeUrl = details?.sourceUrl || 
+    `https://spoonacular.com/recipes/${recipe.title.toLowerCase().replace(/\s+/g, "-")}-${recipe.id}`;
 
   return (
     <Card>
       <CardTop>
-        {recipe.image && <Image src={recipe.image} alt={recipe.title} />}
+        <Image src={recipe.image} alt={recipe.title} />
+
         <CardContent>
-      <Title>{recipe.title}</Title>
-      <IngredientInfo>
-        <Matched>
-          ✅ Matched: {recipe.usedIngredients?.map((i) => i.name || i.original).join(", ") || "No matched ingredients"}
-        </Matched>
-      </IngredientInfo>
+          <Title>{recipe.title}</Title>
 
-      <IngredientInfo>
-        <Missing>
-          ❌ Missing: {recipe.missedIngredients?.map((i) => i.name || i.original).join(", ") || "No missing ingredients"}
-        </Missing>
-      </IngredientInfo>
+          <IngredientInfo>
+            <Matched>✅ Matched: {matchedIngredients}</Matched>
+          </IngredientInfo>
 
-      <BtnRow>
-      <ToggleBtn onClick={handleToggle}>
-        {loadingDetails ? "Loading..." : isOpen ? "Show less" : "Show more"}
-      </ToggleBtn>
+          <IngredientInfo>
+            <Missing>❌ Missing: {missingIngredients}</Missing>
+          </IngredientInfo>
 
-      {saved ? (
-        <SavedBtn disabled>Saved</SavedBtn>
-      ) : (
-      <SaveBtn onClick={handleSave}>Save Recipe</SaveBtn>
-      )}
+          <BtnRow>
+            <ToggleBtn onClick={handleToggle}>
+              {loadingDetails ? "Loading..." : isOpen ? "Show less" : "Show more"}
+            </ToggleBtn>
 
-      </BtnRow>
-      {error && <ErrorMsg>{error}</ErrorMsg>}
+            {saved ? (
+              <SavedBtn disabled>Saved</SavedBtn>
+            ) : (
+              <SaveBtn onClick={handleSave}>Save Recipe</SaveBtn>
+            )}
+          </BtnRow>
+
+          {error && <ErrorMsg>{error}</ErrorMsg>}
         </CardContent>
       </CardTop>
 
       {isOpen && details && (
-        <Details>          
+        <Details>
           <Info>
-            ⏱️ {details.readyInMinutes !== null && details.readyInMinutes !== undefined ? `${details.readyInMinutes} min` : 'unknown time'}
-            {' | '}
-            🍽️ {details.servings !== null && details.servings !== undefined ? `${details.servings} servings` : 'unknown servings'}
-            <ShareButton url={details?.sourceUrl || `https://spoonacular.com/recipes/${recipe.title.toLowerCase().replace(/\s+/g, "-")}-${recipe.id}`} />
+            ⏱️ {displayTime} | 🍽️ {displayServings}
+            <ShareButton url={recipeUrl} />
           </Info>
-          <h4>All ingredients:</h4>
+
+          <DetailTitle>All ingredients:</DetailTitle>
           <ul>
             {details.extendedIngredients
-              ?.filter(
-                (ing) =>
-                  ing.original &&
-                  !/other (things|ingredients) needed/i.test(ing.original)
+              ?.filter((ing) => 
+                ing.original && !/other (things|ingredients) needed/i.test(ing.original)
               )
               .map((ing, index) => (
                 <li key={index}>{ing.original}</li>
               ))}
           </ul>
 
-          <h4>Instructions:</h4>
+          <DetailTitle>Instructions:</DetailTitle>
           {details.analyzedInstructions?.length > 0 ? (
             <ol>
               {details.analyzedInstructions[0].steps.map((step) => (
