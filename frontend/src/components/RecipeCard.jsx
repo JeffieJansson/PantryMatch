@@ -4,7 +4,7 @@ import { useUserStore } from "../stores/userStore";
 import { useNavigate } from "react-router-dom";
 import { fetchRecipeDetails } from "../api/api";
 import { saveRecipe } from "../api/api";
-import CopyButton from "./CopyButton";
+import ShareButton from "./ShareButton";
 import { media } from "../styles/media";
 
 const Card = styled.div`
@@ -243,7 +243,7 @@ const handleSave = async () => {
             ⏱️ {details.readyInMinutes !== null && details.readyInMinutes !== undefined ? `${details.readyInMinutes} min` : 'unknown time'}
             {' | '}
             🍽️ {details.servings !== null && details.servings !== undefined ? `${details.servings} servings` : 'unknown servings'}
-            <CopyButton url={details?.sourceUrl || `https://spoonacular.com/recipes/${recipe.title.toLowerCase().replace(/\s+/g, "-")}-${recipe.id}`} />
+            <ShareButton url={details?.sourceUrl || `https://spoonacular.com/recipes/${recipe.title.toLowerCase().replace(/\s+/g, "-")}-${recipe.id}`} />
           </Info>
           {details.summary && (
             <div dangerouslySetInnerHTML={{ __html: details.summary }} />

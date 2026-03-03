@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useUserStore } from "../stores/userStore";
 import { getSavedRecipes, deleteRecipe } from "../api/api";
 import { media } from "../styles/media";
-import CopyButton from "../components/CopyButton";
+import ShareButton from "../components/ShareButton";
 import LoadingSpinner from "../components/LoadingSpinner";
 
 const Container = styled.div`
@@ -254,7 +254,7 @@ const SavedRecipes = () => {
 
               {isExpanded && (
                   <Details>
-                    <CopyButton url={recipe.sourceUrl || `https://spoonacular.com/recipes/${recipe.title.toLowerCase().replace(/\s+/g, "-")}-${recipe.spoonacularId}`} />
+                    <ShareButton url={recipe.sourceUrl || `https://spoonacular.com/recipes/${recipe.title.toLowerCase().replace(/\s+/g, "-")}-${recipe.spoonacularId}`} />
                     {recipe.summary && (
                       <div dangerouslySetInnerHTML={{ __html: recipe.summary }} />
                     )}
