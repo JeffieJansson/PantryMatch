@@ -9,7 +9,7 @@ const Button = styled.button`
   vertical-align: middle;
 `;
 
-const CopyButton = ({ url, title }) => {
+const ShareButton = ({ url, title }) => {
   const handleShare = async () => {
     try {
       await navigator.share({
@@ -29,9 +29,9 @@ const CopyButton = ({ url, title }) => {
       title="Share recipe"
       aria-label="Share recipe"
     >
-      <Share2 size={14} color="#131313" />
+      <Share2 size={16} color="#010333" />
     </Button>
   );
 };
 
-export default CopyButton;
+export default ShareButton;
