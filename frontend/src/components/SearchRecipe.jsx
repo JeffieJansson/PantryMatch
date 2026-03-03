@@ -136,6 +136,7 @@ const ErrorMsg = styled.p`
   margin: 1rem 0;
 `;
 
+//states
 const SearchRecipe = () => {
   const [input, setInput] = useState("");
   const {
@@ -153,6 +154,7 @@ const SearchRecipe = () => {
     searchRecipes,
   } = useRecipeActions();
 
+  //handlers
   const handleAdd = () => {
     const trimmed = input.trim().toLowerCase();
     if (trimmed && !ingredients.includes(trimmed)) {
@@ -166,6 +168,8 @@ const SearchRecipe = () => {
     handleAdd();
   };
 
+
+  // Toggle diet and intolerance filters
   const toggleFilter = (key) => {
     setFilters({ ...filters, [key]: !filters[key] });
   };
@@ -179,7 +183,11 @@ const SearchRecipe = () => {
           value={input}
           onChange={(e) => setInput(e.target.value)}
         />
-        <AddButton type="submit">Add</AddButton>
+        <AddButton 
+          type="submit" 
+          aria-label="Add ingredient">
+          Add
+        </AddButton>
       </Form>
 
       {ingredients.length > 0 && (
@@ -255,7 +263,10 @@ const SearchRecipe = () => {
         </FilterLabel>
       </FilterSection>
 
-      <ShowButton onClick={searchRecipes} disabled={loading || ingredients.length < 1}>
+      <ShowButton 
+          onClick={searchRecipes} 
+          disabled={loading || ingredients.length < 1}
+          aria-label="Search recipes">
         {loading ? "Searching..." : "Show recipes"}
       </ShowButton>
 
@@ -263,6 +274,7 @@ const SearchRecipe = () => {
       {error && <ErrorMsg>{error}</ErrorMsg>}
       {recipes && recipes.length > 0 && <RecipeList recipes={recipes} />}
       {hasSearched && !loading && !error && recipes.length === 0 && (
+        
         <p>No recipes found. Try different ingredients!</p>
       )}
     </Section>

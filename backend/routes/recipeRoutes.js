@@ -7,7 +7,7 @@ import authenticateUser from "../middleware/authMiddleware.js";
 const router = express.Router();
 
 
-// (GET) Search for recipes based on ingredients and mode (allowExtra or exact), diet, intolerances complexSearch endpoint
+// (GET) Search recipes
 router.get("/search", async (req, res) => {
     const { ingredients, mode, dairyFree, glutenFree, vegetarian, vegan } = req.query;
 
@@ -34,7 +34,7 @@ router.get("/search", async (req, res) => {
       });
     }
 
-    // filter and diet strings for Spoonacular API
+    // filter and diet parameters
     const diet = [
       vegetarian === "true" ? "vegetarian" : null, 
       vegan === "true" ? "vegan" : null
@@ -243,12 +243,12 @@ router.post("/", authenticateUser, async (req, res) => {
 // (DELETE) Delete a saved recipe
 router.delete("/:id", authenticateUser, async (req, res) => {
   try {
-    const recipe = await Recipe.findOneAndDelete({
+    const deleted = await Recipe.findOneAndDelete({
       _id: req.params.id,
       userId: req.user._id, // make sure user can only delete their own saved recipes
     });
 
-    if (!recipe) {
+    if (!deleted) {
       return res.status(404).json({
         success: false,
         message: "Recipe not found or you don't have permission to delete it",
@@ -259,7 +259,7 @@ router.delete("/:id", authenticateUser, async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Recipe deleted successfully",
-      response: recipe,
+      response: deleted,
     });
   } catch (error) {
     res.status(500).json({

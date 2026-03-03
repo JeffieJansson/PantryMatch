@@ -150,6 +150,11 @@ const Details = styled.div`
   }
 `;
 
+const DetailTitle = styled.h4`
+  margin-top: 1rem;
+  color: #222;
+`;
+
 const SavedRecipes = () => {
   const { user } = useUserStore();
   const [recipes, setRecipes] = useState([]);
@@ -242,27 +247,31 @@ const SavedRecipes = () => {
                 </Info>
 
                 <ButtonRow>
-                  <ToggleBtn onClick={() => toggleDetails(recipe._id)}>
+                  <ToggleBtn 
+                    onClick={() => toggleDetails(recipe._id)}>
                     {isExpanded ? "Show less" : "Show more"}
                   </ToggleBtn>
-                  <DeleteBtn onClick={() => handleDelete(recipe._id)}>
+                  
+                  <DeleteBtn 
+                    onClick={() => handleDelete(recipe._id)}>
                     Delete
                   </DeleteBtn>
                 </ButtonRow>
+
               </CardContent>
             </CardTop>
 
               {isExpanded && (
                   <Details>
                     <ShareButton url={recipe.sourceUrl || `https://spoonacular.com/recipes/${recipe.title.toLowerCase().replace(/\s+/g, "-")}-${recipe.spoonacularId}`} />
-                    <h4>Ingredients:</h4>
+                    <DetailTitle>Ingredients:</DetailTitle>
                       <ul>
                         {recipe.extendedIngredients?.map((ing, index) => (
                           <li key={index}>{ing.original || ing.name}</li>
                         ))}
                       </ul>
 
-                    <h4>Instructions:</h4>
+                    <DetailTitle>Instructions:</DetailTitle>
                       {recipe.analyzedInstructions?.length > 0 ? (
                         <ol>
                           {recipe.analyzedInstructions[0].steps.map((step) => (
