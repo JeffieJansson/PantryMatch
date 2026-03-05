@@ -28,13 +28,13 @@ const Title = styled.h1`
   text-align: center;
   font-size: 2.5rem;
   margin-bottom: 1rem;
-  color: #2e8b57;
+  color: #1A6A1A;
 `;
 
 const Subtitle = styled.p`
   text-align: center;
   font-size: 1.1rem;
-  color: #666;
+  color: #353535;
   margin-bottom: 2.5rem;
   
 `;

@@ -224,7 +224,7 @@ const SearchRecipe = () => {
           Allow extra ingredients (recipe may contain more)
         </FilterLabel>
 
-        {/* Diet and  filters */}
+        {/* Diet and intolerance filters */}
         <FilterTitle>Diets</FilterTitle>
         <FilterLabel>
           <input

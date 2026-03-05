@@ -73,8 +73,8 @@ const NavLink = styled(Link)`
 
 const LogoutBtn = styled.button`
   background: none;
+  color: #ab0303;
   border: none;
-  color: #1A6A1A;
   cursor: pointer;
   font-size: 1rem;
   font-weight: 600;

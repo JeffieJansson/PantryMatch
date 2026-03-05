@@ -13,18 +13,6 @@ const fadeInUp = keyframes`
   }
 `;
 
-const gradientShift = keyframes`
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-`;
-
 const float = keyframes`
   0%, 100% {
     transform: translateY(0px);
@@ -105,8 +93,6 @@ const MainTitle = styled.h1`
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: ${gradientShift} 6s ease infinite, ${fadeInUp} 0.8s ease-out 0.2s
-    both;
   letter-spacing: -0.02em;
   line-height: 1.1;
 
@@ -121,7 +107,6 @@ const Subtitle = styled.p`
   margin: 1.5rem 0 0;
   font-weight: 400;
   max-width: 600px;
-  animation: ${fadeInUp} 0.8s ease-out 0.4s both;
   line-height: 1.6;
 
   span {
