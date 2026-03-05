@@ -26,7 +26,7 @@ export const useRecipeStore = create((set) => ({
     set((state) => ({
       ingredients: state.ingredients.filter((i) => i !== ing),
     })),
-
+    
   setRecipes: (recipes) => set({ recipes }),
   setLoading: (loading) => set({ loading }),
   setHasSearched: (hasSearched) => set({ hasSearched }),

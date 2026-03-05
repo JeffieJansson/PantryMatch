@@ -18,7 +18,6 @@ router.get("/search", async (req, res) => {
       response: null,
     });
   }
-
     // split ingredients by comma and trim whitespace, also filter out empty strings
     const ingredientList = 
     ingredients.split(",")
@@ -33,7 +32,6 @@ router.get("/search", async (req, res) => {
         response: null,
       });
     }
-
     // filter and diet parameters
     const diet = [
       vegetarian === "true" ? "vegetarian" : null, 
@@ -63,13 +61,11 @@ router.get("/search", async (req, res) => {
       apiKey: process.env.SPOONACULAR_API_KEY,
     };
 
-
     const response = await axios.get(
       "https://api.spoonacular.com/recipes/complexSearch",
       { params }
     );
 
-    // fetching usedIngredients, missedIngredients, unusedIngredients, extendedIngredients and normalizing them
     const recipes = response.data.results.map(recipe => ({
       ...recipe,
       usedIngredients: recipe.usedIngredients || [],
@@ -99,7 +95,7 @@ router.get("/search", async (req, res) => {
   }
 });
 
-// (GET) Get recipe details by Spoonacular ID
+// (GET) Get recipe details
 router.get("/details/:id", async (req, res) => {
   const { id } = req.params;
 
@@ -109,13 +105,13 @@ router.get("/details/:id", async (req, res) => {
       {
         params: { 
           apiKey: process.env.SPOONACULAR_API_KEY,
-          includeNutrition: false
+          
         }
       }
     );
 
   const details = response.data;
-
+  
     res.status(200).json({
       success: true,
       response: {
@@ -157,7 +153,7 @@ router.get("/", authenticateUser, async (req, res) => {
   }
 });
 
-// (GET) Get recipe by ID
+// (GET) Get single saved recipe by ID
 router.get("/:id", authenticateUser, async (req, res) => {
   const { id } = req.params;
   
@@ -196,7 +192,7 @@ router.get("/:id", authenticateUser, async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Recipe couldn't be found",
+      message: "Failed to fetch recipe",
       response: error.message || error,
     });
   }

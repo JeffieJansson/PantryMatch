@@ -20,7 +20,6 @@ export const useRecipeActions = () => {
     removeIngredient,
   } = useRecipeStore();
 
-
   const searchRecipes = async () => {
     if (ingredients.length < 1) {
       setError("Add at least 1 ingredient");
@@ -32,6 +31,7 @@ export const useRecipeActions = () => {
     try {
       const data = await fetchRecipeByIngredients(ingredients, mode, filters);
       setRecipes(data);
+
     } catch (err) {
       setError(err.message);
       setRecipes([]);
