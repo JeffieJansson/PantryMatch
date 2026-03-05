@@ -2,8 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import { useUserStore } from "../stores/userStore";
 import { useNavigate } from "react-router-dom";
-import { fetchRecipeDetails } from "../api/api";
-import { saveRecipe } from "../api/api";
+import { fetchRecipeDetails, saveRecipe } from "../api/api";
 import ShareButton from "./ShareButton";
 import { media } from "../styles/media";
 
@@ -48,7 +47,7 @@ const Title = styled.h3`
 
 const Info = styled.p`
   font-size: 0.9rem;
-  color: #666;
+  color: #353535;
   margin: 0.3rem 0;
 `;
 
@@ -66,7 +65,7 @@ const Matched = styled.span`
 `;
 
 const Missing = styled.span`
-  color: #a40505;
+  color: #990606;
 `;
 
 const BtnRow = styled.div`
@@ -95,7 +94,6 @@ const ToggleBtn = styled.button`
 
 const SaveBtn = styled.button`
   background: #FFEACC;
-  border: none;
   color: #1D5334;
   padding: 0.5rem 1rem;
   border-radius: 4px;
@@ -112,17 +110,16 @@ const SavedBtn = styled(SaveBtn)`
   color: #1D5334;
   border: 1px solid #1D5334;
   cursor: default;
+
+   &:disabled {
+    cursor: not-allowed;
+  }
 `;
 
 const Details = styled.div`
   margin-top: 1rem;
   padding-top: 1rem;
   border-top: 1px solid #eee;
-
-  h4 {
-    margin-top: 1rem;
-    color: #222;
-  }
 
   ul {
     padding-left: 1.5rem;
@@ -140,8 +137,60 @@ const ErrorMsg = styled.p`
 `;
 
 const DetailTitle = styled.h4`
-  margin-top: 1rem;
+  margin: 0;
   color: #222;
+  font-weight: bold;
+  font-size: 1.1rem;
+`;
+
+const IngredientContainer = styled.div`
+   background: #e8f5e9;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  margin-top: 1rem;
+
+`;
+
+const InstructionList = styled.ol`
+  padding-left: 0.1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  counter-reset: step;
+`;
+
+const InstructionStep = styled.li`
+  margin-bottom: 0.7rem;
+  line-height: 1.5;
+  position: relative;
+  list-style: none;
+  counter-increment: step;
+
+  &::before {
+    content: counter(step);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.7rem;
+    height: 1.7rem;
+    margin-right: 0.7rem;
+    background: #22633E;
+    color: #fff;
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 1rem;
+  }
+`;
+
+const InstructionHtml = styled.div`
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+`;
+
+const InstructionContainer = styled.div`
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  margin-top: 1rem;
 `;
 
 const RecipeCard = ({ recipe }) => {
@@ -150,8 +199,10 @@ const RecipeCard = ({ recipe }) => {
   
   // State
   const [isOpen, setIsOpen] = useState(false);
+
   const [details, setDetails] = useState(null);
   const [loadingDetails, setLoadingDetails] = useState(false);
+  
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
 
@@ -159,6 +210,8 @@ const RecipeCard = ({ recipe }) => {
   const handleToggle = async () => {
     if (!isOpen && !details) {
       setLoadingDetails(true);
+      setError("");
+
       try {
         const data = await fetchRecipeDetails(recipe.id);
         setDetails(data);
@@ -201,9 +254,11 @@ const RecipeCard = ({ recipe }) => {
 
       setSaved(true);
       setError("");
+
     } catch (error) {
       if (error.message === "Recipe already saved") {
         setSaved(true);
+        setError("You have already saved this recipe."); // specific message for duplicate save
       } else {
         setError(error.message);
       }
@@ -227,75 +282,87 @@ const RecipeCard = ({ recipe }) => {
     ? `${details.servings} servings` 
     : "unknown servings";
 
-  const recipeUrl = details?.sourceUrl || 
-    `https://spoonacular.com/recipes/${recipe.title.toLowerCase().replace(/\s+/g, "-")}-${recipe.id}`;
+  const recipeUrl = details?.sourceUrl || `https://spoonacular.com/recipes/${recipe.id}`;
 
   return (
     <Card>
       <CardTop>
         <Image src={recipe.image} alt={recipe.title} />
 
-        <CardContent>
-          <Title>{recipe.title}</Title>
+          <CardContent>
+            <Title>{recipe.title}</Title>
 
-          <IngredientInfo>
-            <Matched>✅ Matched: {matchedIngredients}</Matched>
-          </IngredientInfo>
+            <IngredientInfo>
+              <Matched>✅ Matched: {matchedIngredients}</Matched>
+            </IngredientInfo>
 
-          <IngredientInfo>
-            <Missing>❌ Missing: {missingIngredients}</Missing>
-          </IngredientInfo>
+            <IngredientInfo>
+              <Missing>❌ Missing: {missingIngredients}</Missing>
+            </IngredientInfo>
 
-          <BtnRow>
-            <ToggleBtn onClick={handleToggle}>
-              {loadingDetails ? "Loading..." : isOpen ? "Show less" : "Show more"}
-            </ToggleBtn>
+            <BtnRow>
+              <ToggleBtn onClick={handleToggle}>
+                {loadingDetails ? "Loading..." : isOpen ? "Show less" : "Show more"}
+              </ToggleBtn>
 
-            {saved ? (
-              <SavedBtn disabled>Saved</SavedBtn>
+              {saved ? (
+                <SavedBtn 
+                disabled
+                aria-label={`${recipe.title} is already saved in your collection`}
+                >
+                Saved
+                </SavedBtn>
+              ) : (
+                <SaveBtn 
+                  onClick={handleSave}
+                  aria-label={`Save ${recipe.title} to your collection`}
+                  >
+                  Save Recipe
+                </SaveBtn>
+              )}
+            </BtnRow>
+
+            {error && <ErrorMsg>{error}</ErrorMsg>}
+          </CardContent>
+        </CardTop>
+
+        {isOpen && details && (
+          <Details>
+            <Info>
+              ⏱️ {displayTime} | 🍽️ {displayServings}
+              <ShareButton url={recipeUrl} />
+            </Info>
+
+            <IngredientContainer>
+            <DetailTitle>All ingredients:</DetailTitle>
+            <ul>
+              {details.extendedIngredients
+                ?.filter((ing) => 
+                  ing.original && !/other (things|ingredients) needed/i.test(ing.original)
+                )
+                .map((ing, index) => (
+                  <li key={index}>{ing.original}</li>
+                ))}
+            </ul>
+            </IngredientContainer>
+
+            <InstructionContainer>
+            <DetailTitle>Instructions:</DetailTitle>
+            {recipe.analyzedInstructions?.length > 0 ? (
+              <InstructionList>
+                {recipe.analyzedInstructions[0].steps.map((step) => (
+                  <InstructionStep key={step.number}>{step.step}</InstructionStep>
+                ))}
+              </InstructionList>
+            ) : recipe.instructions ? (
+              <InstructionHtml dangerouslySetInnerHTML={{ __html: recipe.instructions }} />
             ) : (
-              <SaveBtn onClick={handleSave}>Save Recipe</SaveBtn>
+              <p>No instructions available</p>
             )}
-          </BtnRow>
-
-          {error && <ErrorMsg>{error}</ErrorMsg>}
-        </CardContent>
-      </CardTop>
-
-      {isOpen && details && (
-        <Details>
-          <Info>
-            ⏱️ {displayTime} | 🍽️ {displayServings}
-            <ShareButton url={recipeUrl} />
-          </Info>
-
-          <DetailTitle>All ingredients:</DetailTitle>
-          <ul>
-            {details.extendedIngredients
-              ?.filter((ing) => 
-                ing.original && !/other (things|ingredients) needed/i.test(ing.original)
-              )
-              .map((ing, index) => (
-                <li key={index}>{ing.original}</li>
-              ))}
-          </ul>
-
-          <DetailTitle>Instructions:</DetailTitle>
-          {details.analyzedInstructions?.length > 0 ? (
-            <ol>
-              {details.analyzedInstructions[0].steps.map((step) => (
-                <li key={step.number}>{step.step}</li>
-              ))}
-            </ol>
-          ) : details.instructions ? (
-            <div dangerouslySetInnerHTML={{ __html: details.instructions }} />
-          ) : (
-            <p>No instructions available</p>
-          )}
-        </Details>
-      )}
-    </Card>
-  );
-};
-
+            </InstructionContainer>
+          </Details>
+        )}
+      </Card>
+    );
+  };
 export default RecipeCard;
