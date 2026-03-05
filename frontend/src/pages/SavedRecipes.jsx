@@ -5,6 +5,7 @@ import { getSavedRecipes, deleteRecipe } from "../api/api";
 import { media } from "../styles/media";
 import ShareButton from "../components/ShareButton";
 import LoadingSpinner from "../components/LoadingSpinner";
+import  EmptyState  from "../components/EmptyState";
 
 const Container = styled.div`
   margin-top: 2rem;
@@ -17,12 +18,6 @@ const Title = styled.h1`
   color: #2e8b57;
 `;
 
-const Subtitle = styled.p`
-  text-align: center;
-  font-size: 1.1rem;
-  color: #666;
-  margin-bottom: 2.5rem;
-`;
 const RecipeGrid = styled.div`
   display: flex;
   flex-direction: column;
@@ -72,7 +67,7 @@ const RecipeTitle = styled.h2`
 
 const Info = styled.p`
   font-size: 0.9rem;
-  color: #666;
+  color: #353535;
   margin: 0.3rem 0;
 `;
 
@@ -101,7 +96,7 @@ const ToggleBtn = styled.button`
 `;
 
 const DeleteBtn = styled.button`
-  background: #c0392b;
+  background: #ab0303;
   border: none;
   color: white;
   padding: 0.5rem 1rem;
@@ -109,23 +104,10 @@ const DeleteBtn = styled.button`
   cursor: pointer;
   margin-top: 0.5rem;
 
-  &:hover {
-    background: #a93226;
-  }
-`;
-
-const EmptyState = styled.div`
-  text-align: center;
-  padding: 3rem 1rem;
-  color: #666;
-
-  h3 {
-    margin-bottom: 1rem;
-  }
 `;
 
 const ErrorMsg = styled.p`
-  color: #990606;
+  color: #ab0303;
   font-weight: 500;
   margin: 1rem 0;
   text-align: center;
@@ -135,11 +117,6 @@ const Details = styled.div`
   margin-top: 1rem;
   padding-top: 1rem;
   border-top: 1px solid #eee;
-
-  h4 {
-    margin-top: 1rem;
-    color: #222;
-  }
 
   ul {
     padding-left: 1.5rem;
@@ -155,12 +132,65 @@ const DetailTitle = styled.h4`
   color: #222;
 `;
 
+const IngredientContainer = styled.div`
+  background: #e8f5e9;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  margin-top: 1rem;
+`;
+
+const InstructionList = styled.ol`
+  padding-left: 0.1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  counter-reset: step;
+`;
+
+const InstructionStep = styled.li`
+  margin-bottom: 0.7rem;
+  line-height: 1.5;
+  position: relative;
+  list-style: none;
+  counter-increment: step;
+
+  &::before {
+    content: counter(step);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.7rem;
+    height: 1.7rem;
+    margin-right: 0.7rem;
+    background: #22633E;
+    color: #fff;
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 1rem;
+  }
+`;
+
+const InstructionHtml = styled.div`
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+`;
+
+const InstructionContainer = styled.div`
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  margin-top: 1rem;
+`;
+
 const SavedRecipes = () => {
   const { user } = useUserStore();
+
+  //state
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
+  
   const [error, setError] = useState(null);
   const [deleteError, setDeleteError] = useState(null);
+
   const [expandedId, setExpandedId] = useState(null);
 
   useEffect(() => {
@@ -169,11 +199,13 @@ const SavedRecipes = () => {
     }
   }, [user]);
 
+  //handlers
   const fetchSavedRecipes = async () => {
     try {
       setLoading(true);
+      setError(null);
+      
       const data = await getSavedRecipes(user.accessToken);
-      console.log("Fetched saved recipes:", data); // Debug
       setRecipes(data);
     } catch (err) {
       setError(err.message);
@@ -199,7 +231,8 @@ const SavedRecipes = () => {
   const toggleDetails = (id) => {
     setExpandedId(expandedId === id ? null : id);
   };
-
+  
+  //loading state
   if (loading) {
     return (
       <Container>
@@ -208,7 +241,7 @@ const SavedRecipes = () => {
       </Container>
     );
   }
-
+  //error state
   if (error) {
     return (
       <Container>
@@ -218,80 +251,94 @@ const SavedRecipes = () => {
     );
   }
 
+  // Main render
   return (
     <Container>
       <Title>Saved Recipes</Title>
-      <Subtitle>Your recipe collection</Subtitle>
       {deleteError && <ErrorMsg>{deleteError}</ErrorMsg>}
+      
+      {/* show empty state if no saved recipes, otherwise show recipe grid */}
+        {recipes.length === 0 ? (
+          <EmptyState />
+        ) : (
+          <RecipeGrid>
+            {recipes.map((recipe) => {
+              const isExpanded = expandedId === recipe._id;
 
-      {recipes.length === 0 ? (
-        <EmptyState>
-          <h3>No saved recipes yet</h3>
-          <p>Start searching for recipes and save your favorites!</p>
-        </EmptyState>
-      ) : (
-        <RecipeGrid>
-          {recipes.map((recipe) => {
-            const isExpanded = expandedId === recipe._id;
+              //helper variables
+              const displayTime = recipe.readyInMinutes 
+                ? `${recipe.readyInMinutes} min` 
+                : "unknown time";
 
-            return (
-              <Card key={recipe._id}>
-            <CardTop>
-                {recipe.image && <Image src={recipe.image} alt={recipe.title} />}
-              <CardContent>
-                <RecipeTitle>{recipe.title}</RecipeTitle>
-                
-                <Info>
-                  {recipe.readyInMinutes && `⏱️ ${recipe.readyInMinutes} min`}
-                  {recipe.servings && ` | 🍽️ ${recipe.servings} servings`}
-                </Info>
+              const displayServings = recipe.servings 
+                ? `${recipe.servings} servings` 
+                : "unknown servings";
 
-                <ButtonRow>
-                  <ToggleBtn 
-                    onClick={() => toggleDetails(recipe._id)}>
-                    {isExpanded ? "Show less" : "Show more"}
-                  </ToggleBtn>
-                  
-                  <DeleteBtn 
-                    onClick={() => handleDelete(recipe._id)}>
-                    Delete
-                  </DeleteBtn>
-                </ButtonRow>
+              const recipeUrl = recipe.sourceUrl || 
+                `https://spoonacular.com/recipes/${recipe.title.toLowerCase().replace(/\s+/g, "-")}-${recipe.spoonacularId}`;
 
-              </CardContent>
-            </CardTop>
+              return (
+                <Card key={recipe._id}>
+                  <CardTop>
+                    <Image src={recipe.image} alt={recipe.title} />
+                    <CardContent>
+                      <RecipeTitle>{recipe.title}</RecipeTitle>
 
-              {isExpanded && (
-                  <Details>
-                    <ShareButton url={recipe.sourceUrl || `https://spoonacular.com/recipes/${recipe.title.toLowerCase().replace(/\s+/g, "-")}-${recipe.spoonacularId}`} />
-                    <DetailTitle>Ingredients:</DetailTitle>
-                      <ul>
-                        {recipe.extendedIngredients?.map((ing, index) => (
-                          <li key={index}>{ing.original || ing.name}</li>
-                        ))}
-                      </ul>
+                      <Info>
+                        ⏱️ {displayTime} | 🍽️ {displayServings}
+                      </Info>
 
-                    <DetailTitle>Instructions:</DetailTitle>
-                      {recipe.analyzedInstructions?.length > 0 ? (
-                        <ol>
-                          {recipe.analyzedInstructions[0].steps.map((step) => (
-                            <li key={step.number}>{step.step}</li>
+                      <ButtonRow>
+                        <ToggleBtn 
+                          onClick={() => toggleDetails(recipe._id)}>
+                          {isExpanded ? "Show less" : "Show more"}
+                        </ToggleBtn>
+
+                        <DeleteBtn 
+                          onClick={() => handleDelete(recipe._id)}>
+                          Delete
+                        </DeleteBtn>
+                      </ButtonRow>
+
+                    </CardContent>
+                  </CardTop>
+
+                  {isExpanded && (
+                    <Details>
+                      <ShareButton url={recipeUrl} />
+
+                      <IngredientContainer>
+                        <DetailTitle>Ingredients:</DetailTitle>
+                        <ul>
+                          {recipe.extendedIngredients?.map((ing, index) => (
+                            <li key={index}>{ing.original || ing.name}</li>
                           ))}
-                        </ol>
-                      ) : recipe.instructions ? (
-                        <div dangerouslySetInnerHTML={{ __html: recipe.instructions }} />
-                      ) : (
-                        <p>No instructions available</p>
-                      )}
-                  </Details>
-                )}
-              </Card>
-            );
-          })}
-        </RecipeGrid>
-      )}
-    </Container>
-  );
-};
+                        </ul>
+                      </IngredientContainer>
+
+                      <InstructionContainer>
+                        <DetailTitle>Instructions:</DetailTitle>
+                        {recipe.analyzedInstructions?.length > 0 ? (
+                          <InstructionList>
+                            {recipe.analyzedInstructions[0].steps.map((step) => (
+                              <InstructionStep key={step.number}>{step.step}</InstructionStep>
+                            ))}
+                          </InstructionList>
+                        ) : recipe.instructions ? (
+                          <InstructionHtml dangerouslySetInnerHTML={{ __html: recipe.instructions }} />
+                        ) : (
+                          <p>No instructions available</p>
+                        )}
+                      </InstructionContainer>
+                    </Details>
+                  )}
+                </Card>
+              );
+            })}
+          </RecipeGrid>
+        )}
+      </Container>
+    );
+  };
 
 export default SavedRecipes;
