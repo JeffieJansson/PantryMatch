@@ -6,12 +6,11 @@ import authenticateUser from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-
 // (GET) Search recipes
 router.get("/search", async (req, res) => {
     const { ingredients, mode, dairyFree, glutenFree, vegetarian, vegan } = req.query;
-
-  if (!ingredients) {
+ 
+    if (!ingredients) {
     return res.status(400).json({
       success: false,
       message: "Ingredients are required",
@@ -21,10 +20,11 @@ router.get("/search", async (req, res) => {
     // split ingredients by comma and trim whitespace, also filter out empty strings
     const ingredientList = 
     ingredients.split(",")
-    .map(i => 
-      i.trim())
+    .map(ingredient => 
+      ingredient.trim())
     .filter(Boolean);
 
+    // Validate that at least 1 ingredient is provided after processing
     if (ingredientList.length < 1) {
       return res.status(400).json({
         success: false,
@@ -32,6 +32,7 @@ router.get("/search", async (req, res) => {
         response: null,
       });
     }
+
     // filter and diet parameters
     const diet = [
       vegetarian === "true" ? "vegetarian" : null, 
@@ -47,19 +48,23 @@ router.get("/search", async (req, res) => {
       .filter(Boolean)
       .join(",");
 
+
   try {
     const params = {
       includeIngredients: ingredientList.join(","),
       number: 15,
       diet,
       intolerances,
-      sort: mode === "exact" ? "min-missing-ingredients" : "max-used-ingredients",
       addRecipeInformation: true,
       addRecipeInstructions: true,
       instructionsRequired: true,
       fillIngredients: true,
       apiKey: process.env.SPOONACULAR_API_KEY,
     };
+
+    if (mode === "allowExtra") {
+      params.sort = "max-used-ingredients";
+    }
 
     const response = await axios.get(
       "https://api.spoonacular.com/recipes/complexSearch",
@@ -70,10 +75,9 @@ router.get("/search", async (req, res) => {
       ...recipe,
       usedIngredients: recipe.usedIngredients || [],
       missedIngredients: recipe.missedIngredients || [],
-      unusedIngredients: recipe.unusedIngredients || [],
       extendedIngredients: recipe.extendedIngredients || [],
     }));
-
+    
     // Filter out recipes with missing ingredients if mode is 'exact'
     let filteredRecipes = recipes;
     if (mode === "exact") {
@@ -100,17 +104,24 @@ router.get("/details/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
+    if (!id) {
+      return res.status(400).json({
+       success: false,
+       message: "Invalid recipe ID format",
+       response: null,
+     });
+   }
     const response = await axios.get(
       `https://api.spoonacular.com/recipes/${id}/information`,
       {
         params: { 
           apiKey: process.env.SPOONACULAR_API_KEY,
-          
+
         }
       }
     );
 
-  const details = response.data;
+    const details = response.data;
   
     res.status(200).json({
       success: true,
