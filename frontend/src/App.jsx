@@ -11,7 +11,7 @@ import SavedRecipes from "./pages/SavedRecipes";
 
 export const App = () => {
 
-  const { user, setUser, logout } = useUserStore();
+  const { user, setUser } = useUserStore();
   const [isSigningUp, setIsSigningUp] = useState(false);
 
 
