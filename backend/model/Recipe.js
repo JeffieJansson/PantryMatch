@@ -13,6 +13,7 @@ const recipeSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+  
   spoonacularId: {
     type: Number,
     required: true,
@@ -27,6 +28,7 @@ const recipeSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+
     analyzedInstructions: [
       {
         name: String,

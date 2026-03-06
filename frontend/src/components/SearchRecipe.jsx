@@ -24,10 +24,11 @@ const Form = styled.form`
   align-items: stretch;
   margin-bottom: 2rem;
 
-  @media (min-width: 768px) {
+  @media ${media.tablet}, ${media.desktop} {
     flex-direction: row;
     gap: 1rem;
     align-items: center;
+    justify-content: center;
   }
 `;
 
