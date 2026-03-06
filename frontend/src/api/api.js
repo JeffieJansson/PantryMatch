@@ -12,7 +12,7 @@ async function handleResponse(response) {
 }
 
 // Fetch recipes by ingredients with filters from backend API
-export async function fetchRecipeByIngredients(ingredients, mode = "allowExtra", filters = {}) {
+export async function fetchRecipeByIngredients(ingredients, mode, filters = {}) {
   const params = new URLSearchParams({
     ingredients: ingredients.join(","),
     mode,
@@ -26,7 +26,7 @@ export async function fetchRecipeByIngredients(ingredients, mode = "allowExtra",
   return data.response;
 }
 
-// Fetch recipe details by ID from Spoonacular API (public)
+// Fetch recipe details by ID 
 export async function fetchRecipeDetails(id) {
   const res = await fetch(`${API_URL}/recipes/details/${id}`);
   const data = await handleResponse(res);
