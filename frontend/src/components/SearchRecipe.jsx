@@ -137,7 +137,7 @@ const ErrorMsg = styled.p`
 `;
 
 //states
-const SearchRecipe = () => {
+  const SearchRecipe = () => {
   const [input, setInput] = useState("");
   const {
     ingredients,
@@ -155,19 +155,20 @@ const SearchRecipe = () => {
   } = useRecipeActions();
 
   //handlers
-  const handleAdd = () => {
-    const trimmed = input.trim().toLowerCase();
-    if (trimmed && !ingredients.includes(trimmed)) {
-      addIngredient(trimmed);
-      setInput("");
-    }
+  const handleInputChange = (e) => {
+    setInput(e.target.value);
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    handleAdd();
-  };
+  e.preventDefault();
 
+  const trimmed = input.trim().toLowerCase();
+
+  if (trimmed && !ingredients.includes(trimmed)) {
+    addIngredient(trimmed);
+    setInput("");
+  }
+};
 
   // Toggle diet and intolerance filters
   const toggleFilter = (key) => {
@@ -181,7 +182,7 @@ const SearchRecipe = () => {
           type="text"
           placeholder="onion, garlic, chicken..."
           value={input}
-          onChange={(e) => setInput(e.target.value)}
+          onChange={handleInputChange}
         />
         <AddButton 
           type="submit" 
@@ -224,7 +225,7 @@ const SearchRecipe = () => {
           Allow extra ingredients (recipe may contain more)
         </FilterLabel>
 
-        {/* Diet and intolerance filters */}
+        {/* Diet filters */}
         <FilterTitle>Diets</FilterTitle>
         <FilterLabel>
           <input
@@ -272,9 +273,12 @@ const SearchRecipe = () => {
 
       {loading && <LoadingSpinner />}
       {error && <ErrorMsg>{error}</ErrorMsg>}
+
+      {/*if recipes are found, show recipe list*/}
       {recipes && recipes.length > 0 && <RecipeList recipes={recipes} />}
+      
+      {/* if search has been performed, is not loading anymore, no error, and no recipes found, show message*/}
       {hasSearched && !loading && !error && recipes.length === 0 && (
-        
         <p>No recipes found. Try different ingredients!</p>
       )}
     </Section>
