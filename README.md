@@ -14,6 +14,7 @@ If I had more time, I would add:
 - Autocomplete a partial input to suggest possible ingredient names.
 - User profiles and recipe ratings
 - Create an add to shopping list for ingredients
+- Pagination or 'more recipes' button 
 
 ## View it live
 
