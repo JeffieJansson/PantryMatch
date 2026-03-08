@@ -1,8 +1,36 @@
-# Backend part of Final Project
+# PantryMatch Backend
 
-This project includes the packages and babel setup for an express server, and is just meant to make things a little simpler to get up and running with.
+This is the backend part of the PantryMatch project.
+The server is built with Express and handles users, recipes, and authentication.
+External API - Spoonacular
 
-## Getting Started
+## Structure
 
-1.  Install the required dependencies using `npm install`.
-2.  Start the development server using `npm run dev`.
+- `server.js` – Main file for the Express server
+- `routes/` – API routes for users and recipes
+- `model/` – Mongoose models for User and Recipe
+- `middleware/` – Middleware for authentication
+
+## API Endpoints
+
+### Users
+- `POST /api/users/signup` – Create a new user
+- `POST /api/users/login` – Log in a user
+
+### Recipes
+- `GET /api/recipes` – Get all recipes
+- `POST /api/recipes` – Create a new recipe
+- `GET /api/recipes/:id` – Get recipe by id
+
+## Environment Variables
+
+Using a `.env` file with :
+```
+MONGO_URL
+Spoonacular API key
+```
+
+## Development
+
+- Nodemon is used for automatic restarts
+- All code is in ES6 modules

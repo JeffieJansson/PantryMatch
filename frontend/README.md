@@ -1,8 +1,34 @@
-# Frontend part of Final Project
+# PantryMatch Frontend
 
-This boilerplate is designed to give you a head start in your React projects, with a focus on understanding the structure and components. As a student of Technigo, you'll find this guide helpful in navigating and utilizing the repository.
+This is the frontend part of the PantryMatch project.
+The app is built with React and Vite, and provides a modern interface for searching, saving, and sharing recipes based on your pantry ingredients.
 
-## Getting Started
 
-1.  Install the required dependencies using `npm install`.
-2.  Start the development server using `npm run dev`.
+## Structure
+
+- `src/` – Main source folder
+  - `components/` – UI components (recipe cards, search, forms, etc.)
+  - `ui/` – Shared UI elements (spinner, empty state, share button)
+  - `pages/` – Page views (home, about, member, saved recipes)
+  - `hooks/` – Custom React hooks
+  - `stores/` – State management (recipeStore, userStore)
+  - `styles/` – Global and media styles
+  - `api/` – API calls
+
+## Features
+
+- Search for recipes based on ingredients you have
+- Save favorite recipes
+- Share recipes
+- Filter by diet and intolerances
+- Responsive design for desktop and mobile
+
+## Environment Variables
+
+Using a  `.env` file with my API key from spoonacular:
+
+
+## Development
+
+- Built with React, Vite, and styled-components
+- Modern, clean UI
