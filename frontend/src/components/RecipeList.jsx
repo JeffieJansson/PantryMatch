@@ -7,7 +7,7 @@ const Container = styled.div`
 
 const Title = styled.h2`
   margin-bottom: 1rem;
-  color: #222;
+  color: var(--color-title);
 `;
 
 const RecipeGrid = styled.div`

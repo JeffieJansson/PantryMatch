@@ -11,7 +11,7 @@ const Intro = styled.div`
     margin-bottom: 0.5rem;
   }
   p {
-    color: #555;
+    color: var(--color-label);
     font-size: 1.1rem;
   }
 `;

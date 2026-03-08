@@ -6,7 +6,7 @@ import { media } from "../styles/media";
 
 
 const StyledForm = styled.form`
-  background: #fff;
+  background: var(--color-bg);
   padding: 1.2rem;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
@@ -44,7 +44,7 @@ const StyledInput = styled.input`
   padding: 0.5rem;
   margin-top: 0.3rem;
   border-radius: 4px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-border);
   font-size: 1rem;
   width: 100%;
 
@@ -57,8 +57,8 @@ const StyledInput = styled.input`
 `;
 
 const StyledButton = styled.button`
-  background: #256b45;
-  color: #fff;
+  background: var(--color-button);
+  color: var(--color-bg);
   border: none;
   padding: 0.7rem 1.2rem;
   border-radius: 4px;
@@ -67,7 +67,7 @@ const StyledButton = styled.button`
   font-size: 1rem;
   transition: background 0.2s;
   &:hover {
-    background: #1D5334;
+    background: var(--color-green);
   }
 `;
 
@@ -79,14 +79,14 @@ const AuthActions = styled.div`
 `;
 
 const ToggleAuth = styled.span`
-  color: #1D5334;
+  color: var(--color-green);
   cursor: pointer;
   font-size: 0.95rem;
   text-decoration: underline;
 `;
 
 const ErrorMessage = styled.p`
-  color: #c0392b;
+  color: var(--color-error);
   text-align: center;
   margin-top: 1rem;
 `;

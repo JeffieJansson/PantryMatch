@@ -7,7 +7,7 @@ const NavContainer = styled.nav`
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #ffffff;
+  background: var(--color-bg);
   padding: 0.7rem 0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
@@ -50,7 +50,7 @@ const NavItem = styled.li`
 const NavLink = styled(Link)`
   background: none;
   border: none;
-  color: #333;
+  color: var(--color-text);
   font-weight: 600;
   cursor: pointer;
   font-size: 1rem;
@@ -73,7 +73,7 @@ const NavLink = styled(Link)`
 
 const LogoutBtn = styled.button`
   background: none;
-  color: #ab0303;
+  color: var(--color-error);
   border: none;
   cursor: pointer;
   font-size: 1rem;

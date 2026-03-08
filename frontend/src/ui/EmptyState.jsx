@@ -11,12 +11,12 @@ const EmptyTitle = styled.h2`
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 10px;
-  color: #353535;
+  color: var(--color-title);
 `;
 
 const EmptyText = styled.p`
   font-size: 16px;
-  color: #353535;
+  color: var(--color-text);
 `;
 
 const EmptyState = () => {

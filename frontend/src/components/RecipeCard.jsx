@@ -9,9 +9,9 @@ import { FcCancel, FcOk } from "react-icons/fc";
 import { IoHeartSharp, IoHeartOutline } from "react-icons/io5";
 
 const Card = styled.div`
-  background: #fff;
+  background: var(--color-bg);
   padding: 1.5rem 1rem;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--color-border);
 `;
 
 const CardTop = styled.div`
@@ -44,12 +44,12 @@ const CardContent = styled.div`
 
 const Title = styled.h3`
   margin: 0.5rem 0;
-  color: #222;
+  color: var(--color-title);
 `;
 
 const Info = styled.p`
   font-size: 0.9rem;
-  color: #353535;
+  color: var(--color-text);
   margin: 0.3rem 0;
 `;
 
@@ -63,11 +63,11 @@ const IngredientInfo = styled.p`
 `;
 
 const Matched = styled.span`
-  color: #1D5334;
+  color: var(--color-green);
 `;
 
 const Missing = styled.span`
-  color: #990606;
+  color: var(--color-error);
 `;
 
 const BtnRow = styled.div`
@@ -79,8 +79,8 @@ const BtnRow = styled.div`
 
 const ToggleBtn = styled.button`
   background: none;
-  border: 1px solid #1D5334;
-  color: #1D5334;
+  border: 1px solid var(--color-green);
+  color: var(--color-green);
   padding: 0.5rem 1rem;
   border-radius: 4px;
   cursor: pointer;
@@ -89,7 +89,7 @@ const ToggleBtn = styled.button`
   transition: all 0.2s;
 
   &:hover {
-    background: #1D5334;
+    background: var(--color-green);
     color: white;
   }
 `;
@@ -97,7 +97,7 @@ const ToggleBtn = styled.button`
 const SaveBtn = styled.button`
   padding: 0.5rem 1rem;
   border-radius: 4px;
-  border: 1px solid #1D5334;
+  border: 1px solid var(--color-green);
   cursor: pointer;
   margin-top: 0.5rem;
   font-size: 0.95rem;
@@ -106,7 +106,7 @@ const SaveBtn = styled.button`
 `;
 
 const SavedBtn = styled(SaveBtn)`
-  border: 1px solid #1D5334;
+  border: 1px solid var(--color-green);
   cursor: default;
 
    &:disabled {
@@ -117,7 +117,7 @@ const SavedBtn = styled(SaveBtn)`
 const Details = styled.div`
   margin-top: 1rem;
   padding-top: 1rem;
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--color-border);
 
   ul {
     padding-left: 1.5rem;
@@ -129,20 +129,20 @@ const Details = styled.div`
 `;
 
 const ErrorMsg = styled.p`
-  color: #990606;
+  color: var(--color-error);
   font-weight: 500;
   margin: 1rem 0;
 `;
 
 const DetailTitle = styled.h4`
   margin: 0;
-  color: #222;
+  color: var(--color-title);
   font-weight: bold;
   font-size: 1.1rem;
 `;
 
 const IngredientContainer = styled.div`
-   background: #e8f5e9;
+   background: var(--color-tag);
   padding: 0.5rem 1rem;
   border-radius: 6px;
   margin-top: 1rem;
@@ -171,8 +171,8 @@ const InstructionStep = styled.li`
     width: 1.7rem;
     height: 1.7rem;
     margin-right: 0.7rem;
-    background: #22633E;
-    color: #fff;
+    background: var(--color-button);
+    color: var(--color-bg);
     border-radius: 50%;
     font-weight: bold;
     font-size: 1rem;

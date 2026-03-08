@@ -2,8 +2,8 @@ import styled from "styled-components";
 import { media } from "../styles/media";
 
 const Spinner = styled.div`
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #2e8b57;
+  border: 4px solid var(--color-border);
+  border-top: 4px solid var(--color-green-light);
   border-radius: 50%;
   width: 40px;
   height: 40px;

@@ -6,6 +6,12 @@ const GlobalStyles = createGlobalStyle`
     --color-title: #222;
     --color-text: #353535;
     --color-green: #1D5334;
+    --color-green-light: #2e8b57;
+    --color-border: #e6e6e6;
+    --color-tag: #e8f5e9;
+    --color-label: #555;
+    --color-bg: #ffffff;
+    --color-button: #22633E;
   }
 
   *, *::before, *::after {
@@ -13,7 +19,7 @@ const GlobalStyles = createGlobalStyle`
   }
 
   body {
-    background: linear-gradient(135deg, #f8fdf9 0%, #e8f5e9 100%);
+    background: linear-gradient(135deg, #f8fdf9 0%, var(--color-tag) 100%);
     min-height: 100vh;
     margin: 0;
     font-family: 'Inter', Arial, Helvetica, sans-serif;

@@ -4,7 +4,7 @@ const Container = styled.div`
   max-width: 900px;
   margin: 3rem auto;
   padding: 2rem;
-  background: #ffffff;
+  background: var(--color-bg);
   border-radius: 1.5rem;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 `;
@@ -13,13 +13,13 @@ const Title = styled.h1`
   text-align: center;
   font-size: 2.5rem;
   margin-bottom: 1rem;
-  color: #2e8b57;
+  color: var(--color-green-light);
 `;
 
 const Subtitle = styled.p`
   text-align: center;
   font-size: 1.1rem;
-  color: #666;
+  color: var(--color-text);
   margin-bottom: 2.5rem;
 `;
 
@@ -30,12 +30,12 @@ const Section = styled.section`
 const SectionTitle = styled.h2`
   font-size: 1.6rem;
   margin-bottom: 0.8rem;
-  color: #333;
+  color: var(--color-title);
 `;
 
 const Text = styled.p`
   line-height: 1.7;
-  color: #444;
+  color: var(--color-text);
   font-size: 1rem;
 `;
 
@@ -48,11 +48,11 @@ const FeatureList = styled.ul`
 const FeatureItem = styled.li`
   margin-bottom: 0.6rem;
   font-size: 1rem;
-  color: #444;
+  color: var(--color-text);
 
   &::before {
     content: "✔ ";
-    color: #2e8b57;
+    color: var(--color-green-light);
     font-weight: bold;
   }
 `;
@@ -61,8 +61,8 @@ const Footer = styled.div`
   text-align: center;
   margin-top: 3rem;
   padding-top: 1.5rem;
-  border-top: 1px solid #eee;
-  color: #232222;
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text);
   font-size: 0.95rem;
 `;
 

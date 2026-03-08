@@ -16,7 +16,7 @@ const Title = styled.h1`
   text-align: center;
   font-size: 2.5rem;
   margin-bottom: 1rem;
-  color: #2e8b57;
+  color: var(--color-green-light);
 `;
 
 const RecipeGrid = styled.div`
@@ -28,7 +28,7 @@ const RecipeGrid = styled.div`
 `;
 
 const Card = styled.div`
-  background: #fff;
+  background: var(--color-bg);
   padding: 1.5rem 1rem;
   border-bottom: 1px solid #e0e0e0;
 `;
@@ -63,12 +63,12 @@ const CardContent = styled.div`
 
 const RecipeTitle = styled.h2`
   margin: 0.5rem 0;
-  color: #222;
+  color: var(--color-title);
 `;
 
 const Info = styled.p`
   font-size: 0.9rem;
-  color: #353535;
+  color: var(--color-text);
   margin: 0.3rem 0;
 `;
 
@@ -81,8 +81,8 @@ const ButtonRow = styled.div`
 
 const ToggleBtn = styled.button`
   background: none;
-  border: 1px solid #22633E;
-  color: #22633E;
+  border: 1px solid var(--color-button);
+  color: var(--color-button);
   padding: 0.5rem 1rem;
   border-radius: 4px;
   cursor: pointer;
@@ -91,15 +91,15 @@ const ToggleBtn = styled.button`
   transition: all 0.2s;
 
   &:hover {
-    background: #22633E;
-    color: white;
+    background: var(--color-button);
+    color: var(--color-bg);
   }
 `;
 
 const DeleteBtn = styled.button`
-  background: #ab0303;
+  background: var(--color-error);
   border: none;
-  color: white;
+  color: var(--color-bg);
   padding: 0.5rem 1rem;
   border-radius: 4px;
   cursor: pointer;
@@ -108,7 +108,7 @@ const DeleteBtn = styled.button`
 `;
 
 const ErrorMsg = styled.p`
-  color: #ab0303;
+  color: var(--color-error);
   font-weight: 500;
   margin: 1rem 0;
   text-align: center;
@@ -117,7 +117,7 @@ const ErrorMsg = styled.p`
 const Details = styled.div`
   margin-top: 1rem;
   padding-top: 1rem;
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--color-border);
 
   ul {
     padding-left: 1.5rem;
@@ -130,11 +130,11 @@ const Details = styled.div`
 
 const DetailTitle = styled.h4`
   margin-top: 1rem;
-  color: #222;
+  color: var(--color-title);
 `;
 
 const IngredientContainer = styled.div`
-  background: #e8f5e9;
+  background: var(--color-tag);
   padding: 0.5rem 1rem;
   border-radius: 6px;
   margin-top: 1rem;
@@ -162,8 +162,8 @@ const InstructionStep = styled.li`
     width: 1.7rem;
     height: 1.7rem;
     margin-right: 0.7rem;
-    background: #22633E;
-    color: #fff;
+    background: var(--color-button);
+    color: var(--color-bg);
     border-radius: 50%;
     font-weight: bold;
     font-size: 1rem;
