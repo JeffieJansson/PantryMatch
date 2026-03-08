@@ -6,6 +6,7 @@ import { media } from "../styles/media";
 import ShareButton from "../ui/ShareButton";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import EmptyState from "../ui/EmptyState";
+import { MdDelete } from "react-icons/md";
 
 const Container = styled.div`
   margin-top: 2rem;
@@ -295,8 +296,9 @@ const SavedRecipes = () => {
                         </ToggleBtn>
 
                         <DeleteBtn 
-                          onClick={() => handleDelete(recipe._id)}>
-                          Delete
+                          onClick={() => handleDelete(recipe._id)}
+                          aria-label={`Delete ${recipe.title} from your saved recipes`}>
+                          <MdDelete />
                         </DeleteBtn>
                       </ButtonRow>
 

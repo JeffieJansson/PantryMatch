@@ -32,3 +32,23 @@ Using a  `.env` file with my API key from spoonacular:
 
 - Built with React, Vite, and styled-components
 - Modern, clean UI
+
+## Inspiration
+
+### Functionality
+https://www.supercook.com/#/desktop
+https://www.myfridgefood.com/
+https://realfood.tesco.com/what-can-i-make-with.html
+
+### Icons
+https://react-icons.github.io/react-icons/
+
+### loading spinner:
+https://www.blog.northernbadger.co.uk/articles/how-to-create-a-simple-css-loading-spinner-make-it-accessible/
+
+### accessibility check:
+https://accessibleweb.com/color-contrast-checker/
+Lighthouse extension
+accessible web extension
+
+### Technigo learning material

@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { fetchRecipeDetails, saveRecipe } from "../api/api";
 import ShareButton from "../ui/ShareButton";
 import { media } from "../styles/media";
+import { FcCancel, FcOk } from "react-icons/fc";
+import { IoHeartSharp, IoHeartOutline } from "react-icons/io5";
 
 const Card = styled.div`
   background: #fff;
@@ -93,8 +95,6 @@ const ToggleBtn = styled.button`
 `;
 
 const SaveBtn = styled.button`
-  background: #FFEACC;
-  color: #1D5334;
   padding: 0.5rem 1rem;
   border-radius: 4px;
   border: 1px solid #1D5334;
@@ -106,8 +106,6 @@ const SaveBtn = styled.button`
 `;
 
 const SavedBtn = styled(SaveBtn)`
-  background: #e8f5e9;
-  color: #1D5334;
   border: 1px solid #1D5334;
   cursor: default;
 
@@ -293,11 +291,11 @@ const RecipeCard = ({ recipe }) => {
             <Title>{recipe.title}</Title>
 
             <IngredientInfo>
-              <Matched>✅ Matched: {matchedIngredients}</Matched>
+              <Matched><FcOk /> Matched: {matchedIngredients}</Matched>
             </IngredientInfo>
 
             <IngredientInfo>
-              <Missing>❌ Missing: {missingIngredients}</Missing>
+              <Missing><FcCancel /> Missing: {missingIngredients}</Missing>
             </IngredientInfo>
 
             <BtnRow>
@@ -310,14 +308,14 @@ const RecipeCard = ({ recipe }) => {
                 disabled
                 aria-label={`${recipe.title} is already saved in your collection`}
                 >
-                Saved
+                  <IoHeartSharp style={{ color: '#e91e63', fill: '#e91e63' }} />
                 </SavedBtn>
               ) : (
                 <SaveBtn 
                   onClick={handleSave}
                   aria-label={`Save ${recipe.title} to your collection`}
                   >
-                  Save Recipe
+                  <IoHeartOutline style={{ color: '#e91e63' }} />
                 </SaveBtn>
               )}
             </BtnRow>

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Share2 } from "lucide-react";
+import { IoShareOutline } from "react-icons/io5";
 
 const Button = styled.button`
   background: none;
@@ -29,7 +29,7 @@ const ShareButton = ({ url, title }) => {
       title="Share recipe"
       aria-label="Share recipe"
     >
-      <Share2 size={16} color="#010333" />
+      <IoShareOutline size={20} color="#010333" />
     </Button>
   );
 };
