@@ -16,7 +16,6 @@ const Section = styled.section`
   }
 `;
 
-
 const Form = styled.form`
   display: flex;
   flex-direction: column;
@@ -32,25 +31,33 @@ const Form = styled.form`
   }
 `;
 
-const Input = styled.input`
-  box-sizing: border-box;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  font-size: 1rem;
-  width: 100%;
-  min-width: 0;
+const InputWrapper = styled.div`
+  flex: 1;
+  position: relative;
+`;
 
-@media ${media.tablet}, ${media.desktop} {
-  min-width: 300px;
-  max-width: 400px; 
+const Input = styled.input`
   width: 100%;
-}
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  border: 2px solid var(--color-tag);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+
+  &:focus {
+    outline: none;
+    border-color: var(--color-green-light);
+    box-shadow: 0 0 0 4px rgba(46, 139, 87, 0.1);
+  }
+
+  &::placeholder {
+    color: var(--color-label);
+  }
 `;
 
 const AddButton = styled.button`
-  background: #22633E;
-  color: #fff;
+  background: var(--color-button);
+  color: var(--color-bg);
   border: none;
   padding: 0.5rem 1.2rem;
   border-radius: 4px;
@@ -59,6 +66,14 @@ const AddButton = styled.button`
   width: 90px;
   transition: background 0.2s;
 
+  &:hover {
+    background: var(--color-green);
+  }
+
+  &:focus-visible {
+    outline: 3px solid var(--color-green-light);
+    outline-offset: 2px;
+  }
 
   @media ${media.tablet}, ${media.desktop} {
     width: auto;
@@ -71,51 +86,153 @@ const IngredientsInfo = styled.div`
   font-size: 0.95rem;
 `;
 
-const IngredientTag = styled.span`
+const IngredientsLabel = styled.div`
+  font-weight: 600;
+  color: var(--color-label);
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+`;
+
+const IngredientTag = styled.button`
   display: inline-block;
-  background: #e8f5e9;
-  color: #1D5334;
+  background: var(--color-tag);
+  color: var(--color-green);
   padding: 0.3rem 0.6rem;
   border-radius: 12px;
   margin: 0.2rem;
   font-size: 0.9rem;
   cursor: pointer;
+  border: none;
 
   &:hover {
     background: #c8e6c9;
+  }
+
+  &:focus-visible {
+    outline: 3px solid var(--color-green-light);
+    outline-offset: 2px;
   }
 `;
 
 const FilterSection = styled.div`
   margin-bottom: 2rem;
-  background: #fff;
-  border-radius: 8px;
-  padding: 1.2rem 1rem;
 `;
 
-const FilterTitle = styled.div`
-  font-weight: 600;
-  font-size: 1.1rem;
-  color: #222;
+const FilterCard = styled.fieldset`
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
   margin-bottom: 1rem;
+  border: none;
 `;
 
-const FilterLabel = styled.label`
+const FilterTitle = styled.legend`
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--color-title);
+  margin: 0 0 1.25rem 0;
+  padding: 0;
+`;
+
+const ModeGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const ModeOption = styled.label`
+  cursor: pointer;
+  padding: 1.25rem;
+  border: 2px solid ${(props) => (props.checked ? "var(--color-green)" : "var(--color-tag)")};
+  border-radius: 12px;
+  background: ${(props) => (props.checked ? "var(--color-tag)" : "white")};
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  &:hover {
+    border-color: var(--color-green-light);
+  }
+
+  &:focus-within {
+    outline: 3px solid var(--color-green-light);
+    outline-offset: 2px;
+  }
+`;
+
+const ModeRow = styled.div`
   display: flex;
   align-items: center;
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
+  gap: 0.75rem;
+`;
+
+const NativeRadio = styled.input`
+  width: 22px;
+  height: 22px;
+  margin: 0;
+  accent-color: var(--color-green);
   cursor: pointer;
 `;
 
-const Radio = styled.input`
-  margin-right: 0.5rem;
+const ModeTitle = styled.div`
+  font-weight: 600;
+  font-size: 1rem;
+  color: ${(props) => (props.checked ? "var(--color-green)" : "var(--color-title)")};
+`;
+
+const ModeDescription = styled.div`
+  font-size: 0.85rem;
+  color: var(--color-title);
+  line-height: 1.4;
+  margin-left: 2rem;
+`;
+
+const CheckboxGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.75rem;
+`;
+
+const CheckboxLabel = styled.label`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
   cursor: pointer;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  background: ${(props) => (props.checked ? "var(--color-tag)" : "transparent")}
+  transition: 0.2s ease;
+
+  &:focus-within {
+    outline: 3px solid var(--color-green-light);
+    outline-offset: 2px;
+  }
+`;
+
+const NativeCheckbox = styled.input`
+  width: 22px;
+  height: 22px;
+  margin: 0;
+  accent-color: var(--color-green);
+  cursor: pointer;
+`;
+
+const CheckboxText = styled.span`
+  font-size: 0.95rem;
+  color: ${(props) => (props.checked ? "var(--color-green)" : "var(--color-title)")};
 `;
 
 const ShowButton = styled.button`
-  background: #22633E;
-  color: #fff;
+  background: var(--color-button);
+  color: var(--color-bg);
   border: none;
   padding: 0.7rem 2rem;
   border-radius: 4px;
@@ -125,22 +242,30 @@ const ShowButton = styled.button`
   box-shadow: 0 4px 16px rgba(46, 139, 87, 0.15);
   transition: background 0.2s;
 
+  &:hover:not(:disabled) {
+    background: var(--color-green);
+  }
+
+  &:focus-visible {
+    outline: 3px solid var(--color-green-light);
+    outline-offset: 2px;
+  }
 
   &:disabled {
-    background: #ccc;
+    background: var(--color-border);
     cursor: not-allowed;
   }
 `;
 
 const ErrorMsg = styled.p`
-  color: #d32f2f;
+  color: var(--color-error);
   font-weight: 500;
   margin: 1rem 0;
 `;
 
-//states
-  const SearchRecipe = () => {
+const SearchRecipe = () => {
   const [input, setInput] = useState("");
+
   const {
     ingredients,
     recipes,
@@ -156,48 +281,55 @@ const ErrorMsg = styled.p`
     searchRecipes,
   } = useRecipeActions();
 
-  //handlers
   const handleInputChange = (e) => {
     setInput(e.target.value);
   };
 
   const handleSubmit = (e) => {
-  e.preventDefault();
+    e.preventDefault();
+    const trimmed = input.trim().toLowerCase();
 
-  const trimmed = input.trim().toLowerCase();
+    if (trimmed && !ingredients.includes(trimmed)) {
+      addIngredient(trimmed);
+      setInput("");
+    }
+  };
 
-  if (trimmed && !ingredients.includes(trimmed)) {
-    addIngredient(trimmed);
-    setInput("");
-  }
-};
-
-  // Toggle diet and intolerance filters
   const toggleFilter = (key) => {
-    setFilters({ ...filters, [key]: !filters[key] });
+    setFilters((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
   };
 
   return (
     <Section>
       <Form onSubmit={handleSubmit}>
-        <Input
-          type="text"
-          placeholder="onion, garlic, chicken..."
-          value={input}
-          onChange={handleInputChange}
-        />
-        <AddButton 
-          type="submit" 
-          aria-label="Add ingredient">
-          Add
-        </AddButton>
+        <InputWrapper>
+          <Input
+            id="ingredient-input"
+            type="text"
+            placeholder="onion, garlic, chicken..."
+            value={input}
+            onChange={handleInputChange}
+            aria-label="Add ingredient"
+          />
+        </InputWrapper>
+
+        <AddButton type="submit">Add</AddButton>
       </Form>
 
       {ingredients.length > 0 && (
         <IngredientsInfo>
-          <strong>Ingredients:</strong>{" "}
+          <IngredientsLabel>Ingredients ({ingredients.length})</IngredientsLabel>
+
           {ingredients.map((ing) => (
-            <IngredientTag key={ing} onClick={() => removeIngredient(ing)}>
+            <IngredientTag
+              key={ing}
+              type="button"
+              onClick={() => removeIngredient(ing)}
+              aria-label={`Remove ingredient ${ing}`}
+            >
               {ing} ×
             </IngredientTag>
           ))}
@@ -205,81 +337,95 @@ const ErrorMsg = styled.p`
       )}
 
       <FilterSection>
-        <FilterTitle>Filter</FilterTitle>
-        <FilterLabel>
-          <Radio
-            type="radio"
-            name="filter"
-            value="exact"
-            checked={mode === "exact"}
-            onChange={() => setMode("exact")}
-          />
-          Use only these ingredients (no extras allowed)
-        </FilterLabel>
-        <FilterLabel>
-          <Radio
-            type="radio"
-            name="filter"
-            value="allowExtra"
-            checked={mode === "allowExtra"}
-            onChange={() => setMode("allowExtra")}
-          />
-          Allow extra ingredients (recipe may contain more)
-        </FilterLabel>
+        <FilterCard>
+          <FilterTitle>Search Mode</FilterTitle>
 
-        {/* Diet filters */}
-        <FilterTitle>Diets</FilterTitle>
-        <FilterLabel>
-          <input
-            type="checkbox"
-            checked={filters.vegetarian}
-            onChange={() => toggleFilter("vegetarian")}
-          />
-          Vegetarian
-        </FilterLabel>
-        <FilterLabel>
-          <input
-            type="checkbox"
-            checked={filters.vegan}
-            onChange={() => toggleFilter("vegan")}
-          />
-          Vegan
-        </FilterLabel>
-        
-        {/* Intolerance filters */}
-        <FilterTitle>Intolerances</FilterTitle>
-        <FilterLabel>
-          <input
-            type="checkbox"
-            checked={filters.dairyFree}
-            onChange={() => toggleFilter("dairyFree")}
-          />
-          Dairy Free
-        </FilterLabel>
-        <FilterLabel>
-          <input
-            type="checkbox"
-            checked={filters.glutenFree}
-            onChange={() => toggleFilter("glutenFree")}
-          />
-          Gluten Free
-        </FilterLabel>
+          <ModeGrid>
+            <ModeOption checked={mode === "exact"}>
+              <ModeRow>
+                <NativeRadio
+                  type="radio"
+                  name="search-mode"
+                  value="exact"
+                  checked={mode === "exact"}
+                  onChange={() => setMode("exact")}
+                />
+                <ModeTitle checked={mode === "exact"}>Exact Match</ModeTitle>
+              </ModeRow>
+              <ModeDescription>Use only these ingredients</ModeDescription>
+            </ModeOption>
+
+            <ModeOption checked={mode === "allowExtra"}>
+              <ModeRow>
+                <NativeRadio
+                  type="radio"
+                  name="search-mode"
+                  value="allowExtra"
+                  checked={mode === "allowExtra"}
+                  onChange={() => setMode("allowExtra")}
+                />
+                <ModeTitle checked={mode === "allowExtra"}>Allow Extras</ModeTitle>
+              </ModeRow>
+              <ModeDescription>Recipe may contain more</ModeDescription>
+            </ModeOption>
+          </ModeGrid>
+        </FilterCard>
+
+        <FilterCard>
+          <FilterTitle>Diet Preferences</FilterTitle>
+
+          <CheckboxGrid>
+            <CheckboxLabel checked={filters.vegetarian}>
+              <NativeCheckbox
+                type="checkbox"
+                checked={filters.vegetarian}
+                onChange={() => toggleFilter("vegetarian")}
+              />
+              <CheckboxText checked={filters.vegetarian}>Vegetarian</CheckboxText>
+            </CheckboxLabel>
+
+            <CheckboxLabel checked={filters.vegan}>
+              <NativeCheckbox
+                type="checkbox"
+                checked={filters.vegan}
+                onChange={() => toggleFilter("vegan")}
+              />
+              <CheckboxText checked={filters.vegan}>Vegan</CheckboxText>
+            </CheckboxLabel>
+
+            <CheckboxLabel checked={filters.dairyFree}>
+              <NativeCheckbox
+                type="checkbox"
+                checked={filters.dairyFree}
+                onChange={() => toggleFilter("dairyFree")}
+              />
+              <CheckboxText checked={filters.dairyFree}>Dairy Free</CheckboxText>
+            </CheckboxLabel>
+
+            <CheckboxLabel checked={filters.glutenFree}>
+              <NativeCheckbox
+                type="checkbox"
+                checked={filters.glutenFree}
+                onChange={() => toggleFilter("glutenFree")}
+              />
+              <CheckboxText checked={filters.glutenFree}>Gluten Free</CheckboxText>
+            </CheckboxLabel>
+          </CheckboxGrid>
+        </FilterCard>
       </FilterSection>
 
-      <ShowButton 
-          onClick={searchRecipes} 
-          disabled={loading || ingredients.length < 1}
-          aria-label="Search recipes">
+      <ShowButton
+        type="button"
+        onClick={searchRecipes}
+        disabled={loading || ingredients.length < 1}
+      >
         {loading ? "Searching..." : "Show recipes"}
       </ShowButton>
 
       {loading && <LoadingSpinner />}
       {error && <ErrorMsg>{error}</ErrorMsg>}
-
-      {/*if recipes are found, show recipe list*/}
       {recipes && recipes.length > 0 && <RecipeList recipes={recipes} />}
-      
-      {/* if search has been performed, is not loading anymore, no error, and no recipes found, show message*/}
+
       {hasSearched && !loading && !error && recipes.length === 0 && (
         <p>No recipes found. Try different ingredients!</p>
       )}
