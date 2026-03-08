@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useUserStore } from "../stores/userStore";
 import { useNavigate } from "react-router-dom";
 import { fetchRecipeDetails, saveRecipe } from "../api/api";
-import ShareButton from "./ShareButton";
+import ShareButton from "../ui/ShareButton";
 import { media } from "../styles/media";
 
 const Card = styled.div`

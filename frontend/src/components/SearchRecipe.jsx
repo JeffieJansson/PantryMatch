@@ -2,7 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import { useRecipeActions } from "../hooks/useRecipeActions";
 import RecipeList from "./RecipeList";
-import LoadingSpinner from "./LoadingSpinner";
+import LoadingSpinner from "../ui/LoadingSpinner";
 import { media } from "../styles/media";
 
 const Section = styled.section`
@@ -41,10 +41,11 @@ const Input = styled.input`
   width: 100%;
   min-width: 0;
 
-  @media ${media.tablet} {
-    min-width: 350px;
-    width: auto;
-  }
+@media ${media.tablet}, ${media.desktop} {
+  min-width: 300px;
+  max-width: 400px; 
+  width: 100%;
+}
 `;
 
 const AddButton = styled.button`

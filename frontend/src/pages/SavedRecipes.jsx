@@ -3,9 +3,9 @@ import styled from "styled-components";
 import { useUserStore } from "../stores/userStore";
 import { getSavedRecipes, deleteRecipe } from "../api/api";
 import { media } from "../styles/media";
-import ShareButton from "../components/ShareButton";
-import LoadingSpinner from "../components/LoadingSpinner";
-import  EmptyState  from "../components/EmptyState";
+import ShareButton from "../ui/ShareButton";
+import LoadingSpinner from "../ui/LoadingSpinner";
+import EmptyState from "../ui/EmptyState";
 
 const Container = styled.div`
   margin-top: 2rem;
