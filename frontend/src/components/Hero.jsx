@@ -100,11 +100,14 @@ const Divider = styled.div`
 const QuickStats = styled.div`
   display: flex;
   justify-content: center;
-  gap: 4rem;
+  gap: 1rem;
   margin-top: 3rem;
 
-  @media (max-width: 600px) {
+  @media ${media.tablet} {
     gap: 2rem;
+  }
+  @media ${media.desktop} {
+    gap: 4rem;
   }
 `;
 
@@ -113,10 +116,14 @@ const StatItem = styled.div`
 `;
 
 const StatNumber = styled.div`
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 900;
   color: var(--color-green-light);
   margin-bottom: 0.25rem;
+
+  @media ${media.tablet} {
+    font-size: 2rem;
+  }
 `;
 
 const StatLabel = styled.div`
