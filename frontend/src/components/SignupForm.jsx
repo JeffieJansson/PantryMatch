@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { API_URL } from "../api/api";
 import styled from "styled-components";
 import { media } from "../styles/media";
@@ -98,6 +98,13 @@ export const SignupForm = ({ handleLogin, onToggleAuth }) => {
     password: "",
   });
 
+  const emailInputRef = useRef(null);
+  useEffect(() => {
+    if (emailInputRef.current) {
+      emailInputRef.current.focus();
+    }
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -152,6 +159,7 @@ export const SignupForm = ({ handleLogin, onToggleAuth }) => {
         <StyledLabel>
           Email
           <StyledInput
+            ref={emailInputRef}
             onChange={handleChange}
             type="email"
             name="email"
