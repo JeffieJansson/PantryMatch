@@ -8,7 +8,7 @@ const router = express.Router();
 
 // (GET) Search recipes
 router.get("/search", async (req, res) => {
-    const { ingredients, mode, dairyFree, glutenFree, vegetarian, vegan } = req.query;
+    const { ingredients, mode, dairyFree, glutenFree, vegetarian, vegan, offset = "0" } = req.query;
  
     if (!ingredients) {
     return res.status(400).json({
@@ -53,6 +53,7 @@ router.get("/search", async (req, res) => {
     const params = {
       includeIngredients: ingredientList.join(","),
       number: 15,
+      offset: parseInt(offset, 10),
       diet,
       intolerances,
       addRecipeInformation: true,

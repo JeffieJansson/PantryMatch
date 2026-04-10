@@ -263,6 +263,46 @@ const ErrorMsg = styled.p`
   margin: 1rem 0;
 `;
 
+const LoadMoreContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0;
+`;
+
+const LoadMoreButton = styled.button`
+  background: white;
+  color: var(--color-button);
+  border: 2px solid var(--color-button);
+  padding: 1rem 2.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.2s;
+
+  &:hover:not(:disabled) {
+    background: var(--color-button);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(46, 139, 87, 0.2);
+  }
+
+  &:disabled {
+    background: #f5f5f5;
+    color: #ccc;
+    border-color: #e0e0e0;
+    cursor: not-allowed;
+  }
+`;
+
+const NoMoreText = styled.p`
+  text-align: center;
+  color: var(--color-label);
+  font-style: italic;
+  margin: 2rem 0;
+  font-size: 0.95rem;
+`;
+
 const SearchRecipe = () => {
   const [input, setInput] = useState("");
 
@@ -274,11 +314,13 @@ const SearchRecipe = () => {
     error,
     hasSearched,
     filters,
+    hasMore,
     setFilters,
     setMode,
     addIngredient,
     removeIngredient,
     searchRecipes,
+    loadMoreRecipes,
   } = useRecipeActions();
 
   const handleInputChange = (e) => {
@@ -424,7 +466,28 @@ const SearchRecipe = () => {
 
       {loading && <LoadingSpinner />}
       {error && <ErrorMsg>{error}</ErrorMsg>}
-      {recipes && recipes.length > 0 && <RecipeList recipes={recipes} />}
+      {recipes && recipes.length > 0 && (
+        <>
+          <RecipeList recipes={recipes} />
+          
+          {hasMore && (
+            <LoadMoreContainer>
+              <LoadMoreButton
+                onClick={loadMoreRecipes}
+                disabled={loading}
+              >
+                {loading ? "Loading..." : `Load More (${recipes.length} shown)`}
+              </LoadMoreButton>
+            </LoadMoreContainer>
+          )}
+          
+          {!hasMore && (
+            <NoMoreText>
+              No more recipes available. Showing all {recipes.length} results!
+            </NoMoreText>
+          )}
+        </>
+      )}
 
       {hasSearched && !loading && !error && recipes.length === 0 && (
         <p>No recipes found. Try different ingredients!</p>

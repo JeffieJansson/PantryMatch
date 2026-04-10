@@ -9,6 +9,8 @@ export const useRecipeActions = () => {
     filters,
     loading,
     error,
+    offset,        
+    hasMore,       
     setRecipes,
     setLoading,
     setError,
@@ -16,6 +18,10 @@ export const useRecipeActions = () => {
     setFilters,
     hasSearched,
     setHasSearched,
+    setOffset,     
+    setHasMore,    
+    appendRecipes, 
+    resetSearch,   
     addIngredient,
     removeIngredient,
   } = useRecipeStore();
@@ -23,14 +29,43 @@ export const useRecipeActions = () => {
   const searchRecipes = async () => {
     setLoading(true);
     setError(null);
-    setHasSearched(true);
+    resetSearch(); 
+
     try {
-      const data = await fetchRecipeByIngredients(ingredients, mode, filters);
+      const data = await fetchRecipeByIngredients(ingredients, mode, filters, 0);
       setRecipes(data); 
+      setHasSearched(true);
+      setOffset(15);
+      
+      if (data.length < 15) {
+        setHasMore(false);
+      }
 
     } catch (err) {
       setError(err.message);
       setRecipes([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadMoreRecipes = async () => {
+    if (!hasMore || loading) return;
+    
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const data = await fetchRecipeByIngredients(ingredients, mode, filters, offset);
+      appendRecipes(data);
+      setOffset(offset + 15);
+      
+      if (data.length < 15) {
+        setHasMore(false);
+      }
+      
+    } catch (err) {
+      setError(err.message);
     } finally {
       setLoading(false);
     }
@@ -44,10 +79,12 @@ export const useRecipeActions = () => {
     loading,
     error,
     hasSearched,
+    hasMore,
     setFilters,
     setMode,
     addIngredient,
     removeIngredient,
     searchRecipes,
+    loadMoreRecipes,
   };
 };

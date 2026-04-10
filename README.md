@@ -14,7 +14,6 @@ If I had more time, I would add:
 - Autocomplete a partial input to suggest possible ingredient names.
 - User profiles and recipe ratings
 - Create an add to shopping list for ingredients
-- Pagination or 'more recipes' button 
 - Have the save button stay as saved when re-render so when user searcher for recipes again, they can see if they have already saved the recipe. At the moment there's only an error.
 
 ## View it live

@@ -13,7 +13,9 @@ export const useRecipeStore = create((set) => ({
     dairyFree: false,
     glutenFree: false,
   },
-
+  
+  offset: 0,
+  hasMore: true,
   setMode: (mode) => set({ mode }),
   setFilters: (filters) => set({ filters }),
 
@@ -31,4 +33,19 @@ export const useRecipeStore = create((set) => ({
   setLoading: (loading) => set({ loading }),
   setHasSearched: (hasSearched) => set({ hasSearched }),
   setError: (error) => set({ error }),
+  
+  setOffset: (offset) => set({ offset }),
+  setHasMore: (hasMore) => set({ hasMore }),
+
+  appendRecipes: (newRecipes) => set((state) => ({
+    recipes: [...state.recipes, ...newRecipes],
+  })),
+  
+  resetSearch: () => set({
+    recipes: [],
+    offset: 0,
+    hasMore: true,
+    hasSearched: false,
+    error: null,
+  }),
 }));

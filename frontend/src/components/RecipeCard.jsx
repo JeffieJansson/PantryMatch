@@ -95,18 +95,16 @@ const ToggleBtn = styled.button`
 `;
 
 const SaveBtn = styled.button`
+  background: none;
+  border: none;
   padding: 0.5rem 1rem;
-  border-radius: 4px;
-  border: 1px solid var(--color-green);
   cursor: pointer;
   margin-top: 0.5rem;
   font-size: 0.95rem;
-  transition: all 0.2s;
-
+  transition: all 0.1s;
 `;
 
 const SavedBtn = styled(SaveBtn)`
-  border: 1px solid var(--color-green);
   cursor: default;
 
    &:disabled {
@@ -308,14 +306,14 @@ const RecipeCard = ({ recipe }) => {
                 disabled
                 aria-label={`${recipe.title} is already saved in your collection`}
                 >
-                  <IoHeartSharp style={{ color: '#e91e63', fill: '#e91e63' }} />
+                  <IoHeartSharp style={{ color: '#9b1643', fill: '#e91e1e', fontSize: '1.4rem' }} />
                 </SavedBtn>
               ) : (
                 <SaveBtn 
                   onClick={handleSave}
                   aria-label={`Save ${recipe.title} to your collection`}
                   >
-                  <IoHeartOutline style={{ color: '#e91e63' }} />
+                  <IoHeartOutline style={{ color: '#9b1643', fontSize: '1.4rem' }} />
                 </SaveBtn>
               )}
             </BtnRow>
